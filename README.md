@@ -31,8 +31,22 @@ It is a single self-contained `index.html` — no build step, no dependencies.
 
 - Open `index.html` in any modern browser, or
 - serve the folder (`python3 -m http.server`) and open `http://localhost:8000`, or
-- enable **GitHub Pages** on this repo (Settings → Pages → deploy from `main`)
-  to get a permanent URL.
+- use **GitHub Pages**: this repo ships a workflow (`.github/workflows/pages.yml`)
+  that deploys `main` automatically. After the first push, the app lives at
+  `https://<owner>.github.io/DATASETS/`.
+
+## Install on your phone (PWA)
+
+The app is a Progressive Web App: it has a manifest, offline support via a
+service worker, and its own icon.
+
+- **iPhone/iPad:** open the GitHub Pages URL in Safari → Share → **Add to
+  Home Screen**. It launches full-screen with the DATASETS icon and works
+  offline.
+- **Android:** open the URL in Chrome → menu → **Install app**.
+
+Touch gestures are supported: one finger pans (or drags a node), two fingers
+pinch-zoom.
 
 ## Keyboard
 

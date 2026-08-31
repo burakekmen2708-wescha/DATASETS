@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DATASETS</title>
+<meta name="theme-color" content="#0f1219">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DATASETS">
 </head>
 <body>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -740,11 +747,34 @@
     });
   }
 
-  /* ---------- pointer: pan, drag, click ---------- */
-  var pointer = null;
+  /* ---------- pointer: pan, drag, click, pinch ---------- */
+  var pointer = null;          // single-pointer gesture (pan / node drag / click)
+  var touches = {};            // pointerId -> {x, y} for active touch points
+  var touchCount = 0;
+  var pinching = false;
+
+  function touchList() {
+    var out = [];
+    for (var k in touches) out.push(touches[k]);
+    return out;
+  }
 
   canvas.addEventListener('pointerdown', function (e) {
-    if (e.button !== 0) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    touches[e.pointerId] = { x: e.clientX, y: e.clientY };
+    touchCount++;
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* synthetic or stale pointer */ }
+
+    if (touchCount === 2) {
+      // second finger: abandon the single-pointer gesture, start pinching
+      if (pointer && pointer.node && pointer.moved) { pointer.node.updatedAt = Date.now(); persist(); }
+      pointer = null;
+      pinching = true;
+      canvas.classList.add('panning');
+      return;
+    }
+    if (touchCount > 2 || pinching) return;
+
     var nodeEl = e.target.closest('.node');
     pointer = {
       id: e.pointerId,
@@ -756,11 +786,29 @@
       startNode: null
     };
     if (pointer.node) pointer.startNode = { x: pointer.node.x, y: pointer.node.y };
-    canvas.setPointerCapture(e.pointerId);
     if (!nodeEl) canvas.classList.add('panning');
   });
 
   canvas.addEventListener('pointermove', function (e) {
+    if (!(e.pointerId in touches)) return;
+
+    if (pinching) {
+      var prev = touchList();
+      touches[e.pointerId] = { x: e.clientX, y: e.clientY };
+      var cur = touchList();
+      if (cur.length >= 2) {
+        var pm = { x: (prev[0].x + prev[1].x) / 2, y: (prev[0].y + prev[1].y) / 2 };
+        var cm = { x: (cur[0].x + cur[1].x) / 2, y: (cur[0].y + cur[1].y) / 2 };
+        var pd = Math.hypot(prev[0].x - prev[1].x, prev[0].y - prev[1].y) || 1;
+        var cd = Math.hypot(cur[0].x - cur[1].x, cur[0].y - cur[1].y) || 1;
+        view.x += cm.x - pm.x;
+        view.y += cm.y - pm.y;
+        zoomAt(cm.x, cm.y, cd / pd);
+      }
+      return;
+    }
+
+    touches[e.pointerId] = { x: e.clientX, y: e.clientY };
     if (!pointer || e.pointerId !== pointer.id) return;
     var dx = e.clientX - pointer.sx, dy = e.clientY - pointer.sy;
     if (!pointer.moved && Math.abs(dx) + Math.abs(dy) > 4) pointer.moved = true;
@@ -780,6 +828,17 @@
   });
 
   function endPointer(e) {
+    if (e.pointerId in touches) {
+      delete touches[e.pointerId];
+      touchCount = Math.max(0, touchCount - 1);
+    }
+    if (pinching) {
+      if (touchCount < 2) {
+        pinching = false;
+        canvas.classList.remove('panning');
+      }
+      return;
+    }
     if (!pointer || e.pointerId !== pointer.id) return;
     canvas.classList.remove('panning');
     if (!pointer.moved) {
@@ -1205,5 +1264,12 @@
 })();
 </script>
 
+<script>
+if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  });
+}
+</script>
 </body>
 </html>
