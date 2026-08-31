@@ -429,6 +429,7 @@
     <div id="menu" hidden>
       <button id="mRename">Rename center node</button>
       <button id="mFit">Fit everything on screen</button>
+      <button id="mTheme">Theme: System</button>
       <hr>
       <button id="mExport">Export data (JSON)</button>
       <button id="mImport">Import data (JSON)</button>
@@ -756,7 +757,7 @@
     meInner.className = 'inner';
     var meKind = document.createElement('div');
     meKind.className = 'kind';
-    meKind.textContent = 'datasets of';
+    meKind.textContent = 'Datasets of';
     meInner.appendChild(meKind);
     var meNm = document.createElement('div');
     meNm.className = 'nm';
@@ -1119,6 +1120,29 @@
   el('prInput').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') el('prOk').click();
   });
+
+  /* ---------- theme ---------- */
+  var THEME_KEY = 'datasets-theme';
+  var THEMES = ['system', 'light', 'dark'];
+  function getTheme() {
+    try {
+      var t = localStorage.getItem(THEME_KEY);
+      if (THEMES.indexOf(t) !== -1) return t;
+    } catch (e) { /* ignore */ }
+    return 'system';
+  }
+  function applyTheme(t) {
+    if (t === 'system') delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = t;
+    el('mTheme').textContent = 'Theme: ' + t.charAt(0).toUpperCase() + t.slice(1);
+  }
+  el('mTheme').addEventListener('click', function (e) {
+    e.stopPropagation();
+    var t = THEMES[(THEMES.indexOf(getTheme()) + 1) % THEMES.length];
+    try { localStorage.setItem(THEME_KEY, t); } catch (err) { /* ignore */ }
+    applyTheme(t);
+  });
+  applyTheme(getTheme());
 
   function renameMe() {
     promptModal('center node', 'Whose knowledge graph is this?', state.meName, function (v) {
