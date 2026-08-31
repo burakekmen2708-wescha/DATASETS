@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DATASETS</title>
-<meta name="theme-color" content="#0f1219">
+<meta name="theme-color" content="#0e1114">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -13,54 +13,60 @@
 <meta name="apple-mobile-web-app-title" content="DATASETS">
 </head>
 <body>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
   :root {
-    --bg: #eceef2;
-    --dot: #d3d7df;
+    --bg: #f4f5f7;
+    --grid: #e4e7eb;
     --panel: #ffffff;
-    --panel2: #f3f4f8;
-    --text: #1b2230;
-    --muted: #68718a;
-    --line: #dcdfe8;
-    --accent: #b4661f;
-    --accent-soft: rgba(180, 102, 31, .12);
-    --wire: #9aa1b4;
-    --danger: #c73b40;
-    --shadow: 0 2px 6px rgba(20, 26, 48, .08), 0 12px 32px rgba(20, 26, 48, .10);
-    --focus: 0 0 0 3px rgba(180, 102, 31, .35);
+    --panel2: #eef0f3;
+    --text: #1b2530;
+    --muted: #5f6b78;
+    --faint: #96a0ab;
+    --line: #d8dde3;
+    --line2: #c3cad2;
+    --accent: #2f6feb;
+    --accent-text: #ffffff;
+    --accent-soft: rgba(47, 111, 235, .10);
+    --wire: #c3cad2;
+    --danger: #d5393f;
+    --focus: 0 0 0 2px rgba(47, 111, 235, .28);
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #0f1219;
-      --dot: #232a3a;
-      --panel: #171c26;
-      --panel2: #1e2432;
-      --text: #e7eaf1;
-      --muted: #8b93a9;
-      --line: #2a3146;
-      --accent: #e08e4a;
-      --accent-soft: rgba(224, 142, 74, .14);
-      --wire: #4a5266;
-      --danger: #e5484d;
-      --shadow: 0 2px 6px rgba(0, 0, 0, .35), 0 14px 40px rgba(0, 0, 0, .45);
-      --focus: 0 0 0 3px rgba(224, 142, 74, .40);
+      --bg: #0e1114;
+      --grid: #1b2127;
+      --panel: #14181d;
+      --panel2: #1a2026;
+      --text: #dfe5ea;
+      --muted: #7d8894;
+      --faint: #4d565f;
+      --line: #262e36;
+      --line2: #333d46;
+      --accent: #58a6ff;
+      --accent-text: #0b1015;
+      --accent-soft: rgba(88, 166, 255, .12);
+      --wire: #2c353e;
+      --danger: #f4595f;
+      --focus: 0 0 0 2px rgba(88, 166, 255, .32);
     }
   }
   :root[data-theme="dark"] {
-    --bg: #0f1219;
-    --dot: #232a3a;
-    --panel: #171c26;
-    --panel2: #1e2432;
-    --text: #e7eaf1;
-    --muted: #8b93a9;
-    --line: #2a3146;
-    --accent: #e08e4a;
-    --accent-soft: rgba(224, 142, 74, .14);
-    --wire: #4a5266;
-    --danger: #e5484d;
-    --shadow: 0 2px 6px rgba(0, 0, 0, .35), 0 14px 40px rgba(0, 0, 0, .45);
-    --focus: 0 0 0 3px rgba(224, 142, 74, .40);
+    --bg: #0e1114;
+    --grid: #1b2127;
+    --panel: #14181d;
+    --panel2: #1a2026;
+    --text: #dfe5ea;
+    --muted: #7d8894;
+    --faint: #4d565f;
+    --line: #262e36;
+    --line2: #333d46;
+    --accent: #58a6ff;
+    --accent-text: #0b1015;
+    --accent-soft: rgba(88, 166, 255, .12);
+    --wire: #2c353e;
+    --danger: #f4595f;
+    --focus: 0 0 0 2px rgba(88, 166, 255, .32);
   }
 
   * { box-sizing: border-box; }
@@ -68,31 +74,39 @@
   html, body { height: 100%; }
   body {
     margin: 0;
-    font-family: 'Archivo', 'Segoe UI', system-ui, sans-serif;
+    font-family: 'IBM Plex Sans', 'Segoe UI', system-ui, sans-serif;
     background: var(--bg);
     color: var(--text);
     overflow: hidden;
+    font-size: 13.5px;
   }
   button { font: inherit; color: inherit; }
   input, textarea, select { font: inherit; color: var(--text); }
   input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible {
     outline: none; box-shadow: var(--focus);
   }
+  .mono { font-family: 'IBM Plex Mono', ui-monospace, Menlo, monospace; }
+  .ic {
+    width: 15px; height: 15px; flex: none;
+    stroke: currentColor; fill: none;
+    stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
+  }
 
   /* ---------- canvas ---------- */
   #canvas {
-    position: fixed; inset: 0;
+    position: fixed; inset: 52px 0 0 0;
     background-color: var(--bg);
-    background-image: radial-gradient(var(--dot) 1.2px, transparent 1.2px);
-    background-size: 26px 26px;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 52px 52px;
     cursor: grab;
     touch-action: none;
   }
   #canvas.panning { cursor: grabbing; }
   #world { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; }
   #wires { position: absolute; left: 0; top: 0; width: 1px; height: 1px; overflow: visible; pointer-events: none; }
-  #wires path { fill: none; stroke-width: 2; opacity: .75; transition: opacity .25s; }
-  #wires path.dimmed { opacity: .12; }
+  #wires path { fill: none; stroke-width: 1.5; opacity: .85; transition: opacity .25s; }
+  #wires path.dimmed { opacity: .1; }
 
   /* ---------- nodes ---------- */
   .node {
@@ -100,134 +114,137 @@
     transform: translate(-50%, -50%);
     background: var(--panel);
     border: 1px solid var(--line);
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-    min-width: 140px; max-width: 210px;
+    border-radius: 2px;
+    min-width: 150px; max-width: 210px;
     cursor: pointer;
     user-select: none;
-    transition: opacity .25s, box-shadow .2s;
-    overflow: hidden;
+    transition: opacity .25s, border-color .15s;
   }
-  .node:hover { box-shadow: var(--shadow), 0 0 0 1.5px var(--accent); }
-  .node.dimmed { opacity: .18; }
-  .node .strip { height: 4px; width: 100%; background: transparent; }
+  .node:hover { border-color: var(--accent); }
+  .node.dimmed { opacity: .15; }
+  .node .strip { position: absolute; left: 0; right: 0; top: 0; height: 2px; background: transparent; }
   .node .inner { padding: 9px 12px 10px; }
   .node .kind {
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+    font-size: 10.5px;
     color: var(--muted);
     display: flex; align-items: center; gap: 6px;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
   }
-  .node .nm { font-weight: 600; font-size: 14px; line-height: 1.25; }
+  .node .kind .ic { width: 13px; height: 13px; stroke-width: 2; }
+  .node .kind .t::before { content: '['; color: var(--faint); }
+  .node .kind .t::after { content: ']'; color: var(--faint); }
+  .node .nm { font-weight: 600; font-size: 13.5px; line-height: 1.3; letter-spacing: -0.01em; }
   .node .prev {
-    font-size: 11.5px; color: var(--muted); line-height: 1.4;
+    font-size: 11.5px; color: var(--muted); line-height: 1.45;
     margin-top: 4px;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
     overflow: hidden;
   }
   .node .dots { display: flex; gap: 4px; margin-top: 7px; }
-  .node .dots i { width: 8px; height: 8px; border-radius: 50%; display: block; }
+  .node .dots i { width: 7px; height: 7px; display: block; }
 
   .node.me {
-    background: linear-gradient(var(--panel), var(--panel)) padding-box,
-                linear-gradient(135deg, var(--accent), var(--wire)) border-box;
-    border: 2px solid transparent;
     border-radius: 999px;
+    border-color: var(--line2);
+    box-shadow: 0 0 0 1px var(--accent);
     min-width: 0; max-width: none;
-    cursor: pointer;
   }
-  .node.me .inner { padding: 12px 26px 14px; text-align: center; }
-  .node.me .nm { font-size: 19px; }
+  .node.me .inner { padding: 12px 28px 13px; text-align: center; }
   .node.me .kind { justify-content: center; margin-bottom: 2px; }
+  .node.me .nm { font-size: 18px; letter-spacing: -0.02em; }
 
   @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 var(--accent-soft), var(--shadow); }
-    50% { box-shadow: 0 0 0 18px transparent, var(--shadow), 0 0 0 2px var(--accent); }
-    100% { box-shadow: var(--shadow); }
+    0% { box-shadow: 0 0 0 0 var(--accent-soft), 0 0 0 1px var(--accent); }
+    50% { box-shadow: 0 0 0 16px transparent, 0 0 0 1.5px var(--accent); }
+    100% { box-shadow: 0 0 0 0 transparent, 0 0 0 1px var(--accent); }
   }
-  .node.pulse { animation: pulse 1.1s ease-out 2; }
+  .node.pulse { animation: pulse 1.1s ease-out 2; border-color: var(--accent); }
   @media (prefers-reduced-motion: reduce) {
-    .node.pulse { animation: none; box-shadow: var(--shadow), 0 0 0 2.5px var(--accent); }
+    .node.pulse { animation: none; box-shadow: 0 0 0 1.5px var(--accent); }
   }
 
   /* ---------- top bar ---------- */
   #topbar {
-    position: fixed; top: 14px; left: 14px; right: 14px;
-    display: flex; align-items: center; gap: 10px;
+    position: fixed; top: 0; left: 0; right: 0; height: 52px;
+    display: flex; align-items: center; gap: 12px;
+    padding: 0 14px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
     z-index: 30;
-    pointer-events: none;
-    flex-wrap: wrap;
   }
-  #topbar > * { pointer-events: auto; }
   #logo {
-    font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-weight: 600; font-size: 15px; letter-spacing: .22em;
-    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-    box-shadow: var(--shadow);
-    padding: 10px 16px 10px 18px;
-    display: flex; align-items: center; gap: 9px;
+    font-weight: 600; font-size: 14px; letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: 8px;
+    padding-right: 6px;
+    white-space: nowrap;
   }
-  #logo .jack { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-  #searchwrap { position: relative; flex: 1 1 220px; max-width: 460px; }
+  #logo .mark { width: 18px; height: 18px; flex: none; }
+  #logo .mark path { stroke: var(--accent); stroke-width: 2; fill: none; stroke-linecap: round; }
+  #logo .mark circle { fill: var(--accent); }
+  #searchwrap { position: relative; flex: 0 1 420px; min-width: 140px; }
   #search {
     width: 100%;
-    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-    box-shadow: var(--shadow);
-    padding: 11px 14px 11px 38px;
-    font-size: 14px;
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 2px;
+    padding: 8px 34px 8px 34px;
+    font-size: 13px;
   }
-  #search::placeholder { color: var(--muted); }
+  #search::placeholder { color: var(--faint); }
   #searchwrap .mag {
-    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
-    color: var(--muted); font-size: 14px; pointer-events: none;
+    position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+    color: var(--faint); pointer-events: none; display: flex;
+  }
+  #searchwrap kbd {
+    position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
+    font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10px;
+    border: 1px solid var(--line2); border-radius: 2px;
+    padding: 1px 5px; color: var(--faint); pointer-events: none;
   }
   #results {
     position: absolute; top: calc(100% + 6px); left: 0; right: 0;
-    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-    box-shadow: var(--shadow);
+    background: var(--panel); border: 1px solid var(--line2); border-radius: 2px;
     overflow: hidden;
     max-height: 320px; overflow-y: auto;
     z-index: 40;
   }
   .result {
     display: flex; align-items: center; gap: 10px;
-    padding: 10px 14px; cursor: pointer;
+    padding: 9px 13px; cursor: pointer;
     border-bottom: 1px solid var(--line);
+    color: var(--muted);
   }
   .result:last-child { border-bottom: none; }
   .result:hover, .result.active { background: var(--accent-soft); }
-  .result .rnm { font-weight: 600; font-size: 13.5px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .result .rnm { font-weight: 500; font-size: 13px; color: var(--text); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .result .rgroups { display: flex; gap: 4px; }
-  .result .rgroups i { width: 8px; height: 8px; border-radius: 50%; display: block; }
-  .result .rtype { font-size: 13px; }
-  #noresult { padding: 12px 14px; color: var(--muted); font-size: 13px; }
+  .result .rgroups i { width: 7px; height: 7px; display: block; }
+  #noresult { padding: 11px 13px; color: var(--muted); font-size: 12.5px; }
 
+  #topbar .spacer { flex: 1; }
   .btn {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-    box-shadow: var(--shadow);
-    padding: 11px 16px;
-    font-size: 14px; font-weight: 600;
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 2px;
+    padding: 8px 14px;
+    font-size: 13px; font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
   }
-  .btn:hover { border-color: var(--accent); }
-  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .btn.primary:hover { filter: brightness(1.07); }
+  .btn:hover { border-color: var(--line2); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); font-weight: 600; }
+  .btn.primary:hover { filter: brightness(1.08); }
   .btn.danger { color: var(--danger); }
-  .btn.icon { padding: 11px 13px; font-weight: 700; }
+  .btn.icon { width: 34px; height: 34px; padding: 0; color: var(--muted); }
 
-  #menuwrap { position: relative; margin-left: auto; }
+  #menuwrap { position: relative; }
   #menu {
-    position: absolute; right: 0; top: calc(100% + 6px);
-    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-    box-shadow: var(--shadow);
-    min-width: 190px; overflow: hidden; z-index: 40;
+    position: absolute; right: 0; top: calc(100% + 8px);
+    background: var(--panel); border: 1px solid var(--line2); border-radius: 2px;
+    min-width: 200px; overflow: hidden; z-index: 40;
   }
   #menu button {
     display: block; width: 100%; text-align: left;
-    background: none; border: none; padding: 11px 15px;
-    font-size: 13.5px; cursor: pointer;
+    background: none; border: none; padding: 10px 14px;
+    font-size: 13px; cursor: pointer;
   }
   #menu button:hover { background: var(--accent-soft); }
   #menu button.danger { color: var(--danger); }
@@ -236,130 +253,156 @@
   /* ---------- legend ---------- */
   #legend {
     position: fixed; left: 14px; bottom: 14px; z-index: 25;
-    display: flex; flex-direction: column; gap: 6px;
-    max-width: 260px;
+    display: flex; flex-direction: column; gap: 5px;
+    max-width: 280px;
   }
   #legend .ltitle {
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--muted); padding-left: 4px;
+    font-size: 10px; color: var(--faint); padding-left: 2px;
   }
   .lgroup {
     display: flex; align-items: center; gap: 8px;
-    background: var(--panel); border: 1px solid var(--line); border-radius: 999px;
-    box-shadow: var(--shadow);
-    padding: 6px 13px 6px 9px;
-    font-size: 12.5px; font-weight: 500;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 2px;
+    padding: 6px 11px 6px 9px;
+    font-size: 12px; font-weight: 500;
     cursor: pointer;
-    transition: border-color .2s;
+    transition: border-color .15s;
     width: fit-content;
   }
   .lgroup:hover { border-color: var(--accent); }
   .lgroup.on { border-color: var(--accent); background: var(--accent-soft); }
-  .lgroup i { width: 10px; height: 10px; border-radius: 50%; display: block; flex: none; }
-  .lgroup .cnt { color: var(--muted); font-size: 11px; font-family: 'IBM Plex Mono', ui-monospace, monospace; }
+  .lgroup i { width: 8px; height: 8px; display: block; flex: none; }
+  .lgroup .cnt { color: var(--faint); font-size: 11px; font-family: 'IBM Plex Mono', ui-monospace, monospace; }
 
   /* ---------- zoom ---------- */
   #zoomctl {
     position: fixed; right: 14px; bottom: 14px; z-index: 25;
     display: flex; flex-direction: column;
-    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
-    box-shadow: var(--shadow); overflow: hidden;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 2px;
+    overflow: hidden;
   }
   #zoomctl button {
     background: none; border: none; border-bottom: 1px solid var(--line);
-    width: 40px; height: 38px; cursor: pointer; font-size: 16px; font-weight: 600;
+    width: 36px; height: 34px; cursor: pointer; color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
   }
   #zoomctl button:last-child { border-bottom: none; }
-  #zoomctl button:hover { background: var(--accent-soft); }
+  #zoomctl button:hover { background: var(--accent-soft); color: var(--text); }
 
   /* ---------- side panel ---------- */
   #panel {
-    position: fixed; top: 0; right: 0; bottom: 0;
-    width: min(380px, 100vw);
+    position: fixed; top: 52px; right: 0; bottom: 0;
+    width: min(360px, 100vw);
     background: var(--panel);
     border-left: 1px solid var(--line);
-    box-shadow: var(--shadow);
-    z-index: 50;
+    z-index: 26;
     display: flex; flex-direction: column;
-    transform: translateX(0);
   }
   #panel .phead {
     display: flex; align-items: center; gap: 8px;
-    padding: 16px 16px 10px;
+    padding: 14px 16px 10px;
   }
   #panel .phead .ptag {
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--accent); flex: 1;
+    font-size: 11px; color: var(--muted); flex: 1;
+    display: flex; align-items: center; gap: 7px;
+    min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
   }
-  #pclose { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--muted); padding: 4px 8px; border-radius: 8px; }
+  #pclose {
+    background: none; border: none; cursor: pointer; color: var(--muted);
+    width: 26px; height: 26px; border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+  }
   #pclose:hover { background: var(--accent-soft); color: var(--text); }
   #panel .pbody { flex: 1; overflow-y: auto; padding: 0 16px 16px; display: flex; flex-direction: column; gap: 14px; }
   .field label {
     display: block;
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+    font-size: 10.5px;
     color: var(--muted); margin-bottom: 6px;
   }
   .field input[type=text], .field select, .field textarea {
     width: 100%;
-    background: var(--panel2); border: 1px solid var(--line); border-radius: 8px;
-    padding: 10px 12px; font-size: 14px;
+    background: var(--panel2); border: 1px solid var(--line); border-radius: 2px;
+    padding: 9px 11px; font-size: 13.5px;
   }
-  .field textarea { min-height: 200px; resize: vertical; line-height: 1.55; }
-  #pname { font-weight: 600; font-size: 16px; }
+  .field textarea { min-height: 200px; resize: vertical; line-height: 1.6; }
+  #pname { font-weight: 600; font-size: 14.5px; letter-spacing: -0.01em; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip {
     display: inline-flex; align-items: center; gap: 6px;
-    border: 1px solid var(--line); border-radius: 999px;
+    border: 1px solid var(--line); border-radius: 2px;
     background: var(--panel2);
-    padding: 5px 12px 5px 8px; font-size: 12.5px; cursor: pointer;
+    padding: 4px 11px 4px 8px; font-size: 12px; font-weight: 500; cursor: pointer;
     transition: border-color .15s;
   }
-  .chip i { width: 9px; height: 9px; border-radius: 50%; display: block; }
-  .chip:hover { border-color: var(--accent); }
-  .chip.on { border-color: currentColor; font-weight: 600; }
-  .chip.newg { color: var(--accent); border-style: dashed; }
-  .pmeta { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; color: var(--muted); }
+  .chip i { width: 8px; height: 8px; display: block; }
+  .chip:hover { border-color: var(--line2); }
+  .chip.on { border-color: currentColor; }
+  .chip.newg { color: var(--muted); border-style: dashed; }
+  .pmeta { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; color: var(--faint); }
   #panel .pfoot { padding: 12px 16px; border-top: 1px solid var(--line); display: flex; gap: 8px; }
-  #panel .pfoot .btn { box-shadow: none; flex: 1; }
+  #panel .pfoot .btn { flex: 1; background: none; }
 
   /* ---------- modals ---------- */
   .overlay {
     position: fixed; inset: 0; z-index: 60;
-    background: rgba(10, 13, 22, .45);
+    background: rgba(6, 9, 12, .55);
     display: flex; align-items: center; justify-content: center;
     padding: 20px;
   }
   .modal {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
-    box-shadow: var(--shadow);
+    background: var(--panel); border: 1px solid var(--line2); border-radius: 2px;
     width: min(440px, 100%);
     max-height: 88vh; overflow-y: auto;
     padding: 20px;
     display: flex; flex-direction: column; gap: 14px;
   }
-  .modal h2 { margin: 0; font-size: 17px; }
+  .modal h2 { margin: 0; font-size: 16px; letter-spacing: -0.01em; }
   .modal .mtag {
     font-family: 'IBM Plex Mono', ui-monospace, monospace;
-    font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
+    font-size: 10.5px; color: var(--accent);
   }
   .mrow { display: flex; gap: 8px; justify-content: flex-end; }
-  .modal textarea { width: 100%; background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; min-height: 140px; font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 12px; }
+  .modal textarea {
+    width: 100%; background: var(--panel2); border: 1px solid var(--line); border-radius: 2px;
+    padding: 10px 12px; min-height: 140px;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11.5px;
+  }
   #hintbubble {
     position: fixed; left: 50%; top: 62%; transform: translateX(-50%);
-    background: var(--panel); border: 1px dashed var(--accent); border-radius: 12px;
-    box-shadow: var(--shadow);
-    padding: 12px 18px; font-size: 13.5px; color: var(--muted);
+    background: var(--panel); border: 1px dashed var(--accent); border-radius: 2px;
+    padding: 12px 18px; font-size: 13px; color: var(--muted);
     z-index: 20; pointer-events: none; text-align: center;
   }
   @media (max-width: 640px) {
-    #topbar { gap: 8px; }
-    #logo { padding: 9px 12px; font-size: 13px; }
-    #legend { max-width: 46vw; }
+    #topbar { gap: 8px; padding: 0 10px; }
+    #addBtn span { display: none; }
+    #searchwrap kbd { display: none; }
+    #legend { max-width: 50vw; }
   }
 </style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="i-search"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></g>
+    <g id="i-plus"><path d="M12 5v14M5 12h14"/></g>
+    <g id="i-minus"><path d="M5 12h14"/></g>
+    <g id="i-close"><path d="M6 6l12 12M18 6L6 18"/></g>
+    <g id="i-fit"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M16 21h3a2 2 0 0 0 2-2v-3M8 21H5a2 2 0 0 1-2-2v-3"/></g>
+    <g id="i-more"><circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none"/></g>
+    <g id="i-user"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></g>
+    <g id="i-book"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></g>
+    <g id="i-film"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M7 3v18M17 3v18M3 8h4M3 16h4M17 8h4M17 16h4"/></g>
+    <g id="i-video"><rect x="2" y="6" width="14" height="12" rx="1"/><path d="M22 8.5l-6 3.5 6 3.5v-7z"/></g>
+    <g id="i-mic"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 19v3"/></g>
+    <g id="i-doc"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></g>
+    <g id="i-cal"><rect x="3" y="5" width="18" height="16" rx="1"/><path d="M8 3v4M16 3v4M3 10h18"/></g>
+    <g id="i-cap"><path d="M22 9L12 4 2 9l10 5 10-5z"/><path d="M6 11.5V16c3.5 3 8.5 3 12 0v-4.5"/></g>
+    <g id="i-bulb"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.8.7 1 1.5 1 2.5h6c0-1 .2-1.8 1-2.5A6 6 0 0 0 12 3z"/></g>
+    <g id="i-box"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></g>
+  </defs>
+</svg>
 
 <div id="canvas">
   <div id="world">
@@ -369,15 +412,20 @@
 </div>
 
 <header id="topbar">
-  <div id="logo"><span class="jack"></span>DATASETS</div>
+  <div id="logo">
+    <svg class="mark" viewBox="0 0 24 24"><path d="M12 12L5 5M12 12l7-4M12 12l-6 7M12 12l8 6"/><circle cx="12" cy="12" r="3.2"/></svg>
+    DATASETS
+  </div>
   <div id="searchwrap">
-    <span class="mag">⌕</span>
-    <input id="search" type="text" placeholder="Search sources, notes, groups…" autocomplete="off">
+    <span class="mag"><svg class="ic" viewBox="0 0 24 24"><use href="#i-search"/></svg></span>
+    <input id="search" type="text" placeholder="Search sources, notes, groups" autocomplete="off">
+    <kbd>/</kbd>
     <div id="results" hidden></div>
   </div>
-  <button class="btn primary" id="addBtn">+ Add dataset</button>
+  <div class="spacer"></div>
+  <button class="btn primary" id="addBtn"><svg class="ic" viewBox="0 0 24 24"><use href="#i-plus"/></svg><span>Add dataset</span></button>
   <div id="menuwrap">
-    <button class="btn icon" id="menuBtn" aria-label="Menu">⋯</button>
+    <button class="btn icon" id="menuBtn" aria-label="Menu"><svg class="ic" viewBox="0 0 24 24"><use href="#i-more"/></svg></button>
     <div id="menu" hidden>
       <button id="mRename">Rename center node</button>
       <button id="mFit">Fit everything on screen</button>
@@ -393,21 +441,21 @@
 <div id="legend"></div>
 
 <div id="zoomctl">
-  <button id="zIn" aria-label="Zoom in">+</button>
-  <button id="zOut" aria-label="Zoom out">−</button>
-  <button id="zFit" aria-label="Fit view" style="font-size:13px">⤢</button>
+  <button id="zIn" aria-label="Zoom in"><svg class="ic" viewBox="0 0 24 24"><use href="#i-plus"/></svg></button>
+  <button id="zOut" aria-label="Zoom out"><svg class="ic" viewBox="0 0 24 24"><use href="#i-minus"/></svg></button>
+  <button id="zFit" aria-label="Fit view"><svg class="ic" viewBox="0 0 24 24"><use href="#i-fit"/></svg></button>
 </div>
 
 <aside id="panel" hidden>
   <div class="phead">
     <span class="ptag" id="ptag">Dataset</span>
-    <button id="pclose" aria-label="Close panel">✕</button>
+    <button id="pclose" aria-label="Close panel"><svg class="ic" viewBox="0 0 24 24"><use href="#i-close"/></svg></button>
   </div>
   <div class="pbody">
     <div class="field"><label for="pname">Source name</label><input type="text" id="pname"></div>
     <div class="field"><label for="ptype">Source type</label><select id="ptype"></select></div>
     <div class="field"><label>Groups</label><div class="chips" id="pchips"></div></div>
-    <div class="field"><label for="pnotes">Extracted knowledge / notes</label><textarea id="pnotes" placeholder="Lessons, quotes, ideas worth keeping…"></textarea></div>
+    <div class="field"><label for="pnotes">Extracted knowledge</label><textarea id="pnotes" placeholder="Lessons, quotes, ideas worth keeping…"></textarea></div>
     <div class="pmeta" id="pmeta"></div>
   </div>
   <div class="pfoot">
@@ -417,12 +465,12 @@
 
 <div class="overlay" id="addOverlay" hidden>
   <div class="modal">
-    <span class="mtag">New dataset</span>
+    <span class="mtag">new dataset</span>
     <h2>Add a source of knowledge</h2>
     <div class="field"><label for="aname">Source name</label><input type="text" id="aname" placeholder="e.g. Simon Sinek, Atomic Habits…"></div>
     <div class="field"><label for="atype">Source type</label><select id="atype"></select></div>
-    <div class="field"><label>Groups <span style="text-transform:none;letter-spacing:0">(optional)</span></label><div class="chips" id="achips"></div></div>
-    <div class="field"><label for="anotes">First notes <span style="text-transform:none;letter-spacing:0">(optional)</span></label><textarea id="anotes" style="min-height:90px;font-family:inherit;font-size:14px" placeholder="What did you learn?"></textarea></div>
+    <div class="field"><label>Groups (optional)</label><div class="chips" id="achips"></div></div>
+    <div class="field"><label for="anotes">First notes (optional)</label><textarea id="anotes" style="min-height:90px;font-family:inherit;font-size:13.5px" placeholder="What did you learn?"></textarea></div>
     <div class="mrow">
       <button class="btn" id="aCancel">Cancel</button>
       <button class="btn primary" id="aSave">Add to graph</button>
@@ -432,7 +480,7 @@
 
 <div class="overlay" id="promptOverlay" hidden>
   <div class="modal">
-    <span class="mtag" id="prTag">Edit</span>
+    <span class="mtag" id="prTag">edit</span>
     <h2 id="prTitle">Edit</h2>
     <div class="field"><input type="text" id="prInput"></div>
     <div class="mrow">
@@ -444,9 +492,9 @@
 
 <div class="overlay" id="ioOverlay" hidden>
   <div class="modal">
-    <span class="mtag" id="ioTag">Data</span>
+    <span class="mtag" id="ioTag">data</span>
     <h2 id="ioTitle">Export</h2>
-    <p id="ioHelp" style="margin:0;font-size:13px;color:var(--muted)"></p>
+    <p id="ioHelp" style="margin:0;font-size:12.5px;color:var(--muted)"></p>
     <textarea id="ioText" spellcheck="false"></textarea>
     <div class="mrow">
       <button class="btn" id="ioCancel">Close</button>
@@ -460,17 +508,18 @@
   'use strict';
 
   var STORE_KEY = 'datasets-app-v1';
+  var GRID = 52;
   var TYPES = [
-    ['person',  '👤', 'Person'],
-    ['book',    '📖', 'Book'],
-    ['movie',   '🎬', 'Movie'],
-    ['video',   '🎥', 'Video'],
-    ['podcast', '🎙️', 'Podcast'],
-    ['article', '📰', 'Article'],
-    ['event',   '🎪', 'Event / talk'],
-    ['course',  '🎓', 'Course'],
-    ['idea',    '💡', 'Idea'],
-    ['other',   '📦', 'Other']
+    ['person',  'i-user', 'Person'],
+    ['book',    'i-book', 'Book'],
+    ['movie',   'i-film', 'Movie'],
+    ['video',   'i-video', 'Video'],
+    ['podcast', 'i-mic', 'Podcast'],
+    ['article', 'i-doc', 'Article'],
+    ['event',   'i-cal', 'Event / talk'],
+    ['course',  'i-cap', 'Course'],
+    ['idea',    'i-bulb', 'Idea'],
+    ['other',   'i-box', 'Other']
   ];
   var PALETTE = ['#e5484d', '#e8791d', '#c9a227', '#2fa36b', '#17a2a8',
                  '#3e7bfa', '#7c5ce0', '#c74fb6', '#9a6b4f', '#64748b'];
@@ -478,8 +527,18 @@
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
-  function typeIcon(t) { for (var i = 0; i < TYPES.length; i++) if (TYPES[i][0] === t) return TYPES[i][1]; return '📦'; }
-  function typeLabel(t) { for (var i = 0; i < TYPES.length; i++) if (TYPES[i][0] === t) return TYPES[i][2]; return 'Other'; }
+  function typeDef(t) { for (var i = 0; i < TYPES.length; i++) if (TYPES[i][0] === t) return TYPES[i]; return TYPES[TYPES.length - 1]; }
+  function typeLabel(t) { return typeDef(t)[2]; }
+  function mkIcon(iconId, cls) {
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', cls || 'ic');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    var use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttribute('href', '#' + iconId);
+    svg.appendChild(use);
+    return svg;
+  }
+  function typeIconEl(t) { return mkIcon(typeDef(t)[1]); }
   function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function el(id) { return document.getElementById(id); }
 
@@ -548,20 +607,21 @@
 
   /* ---------- view (pan/zoom) ---------- */
   var canvas = el('canvas'), world = el('world'), wiresSvg = el('wires'), nodesDiv = el('nodes');
-  var view = { x: window.innerWidth / 2, y: window.innerHeight / 2, z: 1 };
+  var view = { x: window.innerWidth / 2, y: (window.innerHeight - 52) / 2, z: 1 };
 
   function applyView() {
     world.style.transform = 'translate(' + view.x + 'px,' + view.y + 'px) scale(' + view.z + ')';
-    var s = 26 * view.z;
+    var s = GRID * view.z;
     canvas.style.backgroundSize = s + 'px ' + s + 'px';
     canvas.style.backgroundPosition = view.x + 'px ' + view.y + 'px';
     state.view = { x: view.x, y: view.y, z: view.z };
     persist();
   }
   function screenToWorld(sx, sy) {
-    return { x: (sx - view.x) / view.z, y: (sy - view.y) / view.z };
+    return { x: (sx - view.x) / view.z, y: (sy - 52 - view.y) / view.z };
   }
   function zoomAt(sx, sy, factor) {
+    sy = sy - 52;
     var nz = clamp(view.z * factor, 0.22, 2.6);
     factor = nz / view.z;
     view.x = sx - (sx - view.x) * factor;
@@ -589,6 +649,8 @@
     animFrame = requestAnimationFrame(step);
   }
 
+  function viewH() { return window.innerHeight - 52; }
+
   function fitView() {
     var minX = -160, maxX = 160, minY = -80, maxY = 80;
     state.datasets.forEach(function (d) {
@@ -596,10 +658,10 @@
       minY = Math.min(minY, d.y - 70);  maxY = Math.max(maxY, d.y + 70);
     });
     var w = maxX - minX, h = maxY - minY;
-    var z = clamp(Math.min(window.innerWidth / w, window.innerHeight / h) * 0.9, 0.22, 1.3);
+    var z = clamp(Math.min(window.innerWidth / w, viewH() / h) * 0.9, 0.22, 1.3);
     animateView({
       x: window.innerWidth / 2 - (minX + w / 2) * z,
-      y: window.innerHeight / 2 - (minY + h / 2) * z,
+      y: viewH() / 2 - (minY + h / 2) * z,
       z: z
     }, 500);
   }
@@ -634,7 +696,11 @@
     inner.className = 'inner';
     var kind = document.createElement('div');
     kind.className = 'kind';
-    kind.textContent = typeIcon(d.type) + ' ' + typeLabel(d.type);
+    kind.appendChild(typeIconEl(d.type));
+    var kt = document.createElement('span');
+    kt.className = 't';
+    kt.textContent = typeLabel(d.type);
+    kind.appendChild(kt);
     inner.appendChild(kind);
     var nm = document.createElement('div');
     nm.className = 'nm';
@@ -713,7 +779,7 @@
     if (state.datasets.length === 0) {
       var hb = document.createElement('div');
       hb.id = 'hintbubble';
-      hb.textContent = 'Your graph is empty — press “+ Add dataset” to wire in your first source.';
+      hb.textContent = 'Your graph is empty — press “Add dataset” to wire in your first source.';
       document.body.appendChild(hb);
     }
   }
@@ -724,7 +790,7 @@
     if (!state.groups.length) return;
     var t = document.createElement('div');
     t.className = 'ltitle';
-    t.textContent = 'Groups';
+    t.textContent = 'groups';
     lg.appendChild(t);
     state.groups.forEach(function (g) {
       var cnt = state.datasets.filter(function (d) { return d.groups.indexOf(g.id) !== -1; }).length;
@@ -748,8 +814,8 @@
   }
 
   /* ---------- pointer: pan, drag, click, pinch ---------- */
-  var pointer = null;          // single-pointer gesture (pan / node drag / click)
-  var touches = {};            // pointerId -> {x, y} for active touch points
+  var pointer = null;
+  var touches = {};
   var touchCount = 0;
   var pinching = false;
 
@@ -766,7 +832,6 @@
     try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* synthetic or stale pointer */ }
 
     if (touchCount === 2) {
-      // second finger: abandon the single-pointer gesture, start pinching
       if (pointer && pointer.node && pointer.moved) { pointer.node.updatedAt = Date.now(); persist(); }
       pointer = null;
       pinching = true;
@@ -866,8 +931,8 @@
     openAddModal(w);
   });
 
-  el('zIn').addEventListener('click', function () { zoomAt(window.innerWidth / 2, window.innerHeight / 2, 1.25); });
-  el('zOut').addEventListener('click', function () { zoomAt(window.innerWidth / 2, window.innerHeight / 2, 0.8); });
+  el('zIn').addEventListener('click', function () { zoomAt(window.innerWidth / 2, 52 + viewH() / 2, 1.25); });
+  el('zOut').addEventListener('click', function () { zoomAt(window.innerWidth / 2, 52 + viewH() / 2, 0.8); });
   el('zFit').addEventListener('click', fitView);
   el('mFit').addEventListener('click', function () { closeMenu(); fitView(); });
 
@@ -880,12 +945,19 @@
     TYPES.forEach(function (t) {
       var o = document.createElement('option');
       o.value = t[0];
-      o.textContent = t[1] + ' ' + t[2];
+      o.textContent = t[2];
       sel.appendChild(o);
     });
   }
   fillTypeSelect(el('ptype'));
   fillTypeSelect(el('atype'));
+
+  function setPtag(d) {
+    var tag = el('ptag');
+    tag.textContent = '';
+    tag.appendChild(typeIconEl(d.type));
+    tag.appendChild(document.createTextNode('Dataset — ' + typeLabel(d.type)));
+  }
 
   function renderChips(container, selected, onToggle) {
     container.textContent = '';
@@ -907,7 +979,7 @@
     add.className = 'chip newg';
     add.textContent = '+ New group';
     add.addEventListener('click', function () {
-      promptModal('New group', 'Name this group', '', function (name) {
+      promptModal('new group', 'Name this group', '', function (name) {
         if (!name.trim()) return;
         var g = createGroup(name.trim());
         onToggle(g.id);
@@ -921,7 +993,7 @@
     if (!d) return;
     panelId = id;
     panel.hidden = false;
-    el('ptag').textContent = 'Dataset · ' + typeLabel(d.type);
+    setPtag(d);
     el('pname').value = d.name;
     el('ptype').value = d.type;
     el('pnotes').value = d.notes || '';
@@ -962,7 +1034,7 @@
     if (!d) return;
     d.type = this.value;
     d.updatedAt = Date.now();
-    el('ptag').textContent = 'Dataset · ' + typeLabel(d.type);
+    setPtag(d);
     persist();
     render();
   });
@@ -1049,7 +1121,7 @@
   });
 
   function renameMe() {
-    promptModal('Center node', 'Whose knowledge graph is this?', state.meName, function (v) {
+    promptModal('center node', 'Whose knowledge graph is this?', state.meName, function (v) {
       if (v.trim()) { state.meName = v.trim(); persist(); render(); }
     });
   }
@@ -1067,7 +1139,7 @@
     var z = clamp(view.z, 0.9, 1.4);
     animateView({
       x: window.innerWidth / 2 - d.x * z,
-      y: window.innerHeight / 2 - d.y * z,
+      y: viewH() / 2 - d.y * z,
       z: z
     }, 650, function () {
       var n = nodeEls[id];
@@ -1104,10 +1176,7 @@
       matches.forEach(function (d, idx) {
         var r = document.createElement('div');
         r.className = 'result';
-        var ty = document.createElement('span');
-        ty.className = 'rtype';
-        ty.textContent = typeIcon(d.type);
-        r.appendChild(ty);
+        r.appendChild(typeIconEl(d.type));
         var nm = document.createElement('span');
         nm.className = 'rnm';
         nm.textContent = d.name;
@@ -1177,7 +1246,7 @@
   el('mExport').addEventListener('click', function () {
     closeMenu();
     ioMode = 'export';
-    el('ioTag').textContent = 'Backup';
+    el('ioTag').textContent = 'backup';
     el('ioTitle').textContent = 'Export your data';
     el('ioHelp').textContent = 'Copy this JSON somewhere safe (a file, a note). You can paste it back later with Import.';
     el('ioText').value = JSON.stringify(state, null, 2);
@@ -1187,7 +1256,7 @@
   el('mImport').addEventListener('click', function () {
     closeMenu();
     ioMode = 'import';
-    el('ioTag').textContent = 'Restore';
+    el('ioTag').textContent = 'restore';
     el('ioTitle').textContent = 'Import data';
     el('ioHelp').textContent = 'Paste a previously exported JSON below. This replaces everything currently in the graph.';
     el('ioText').value = '';
@@ -1206,7 +1275,7 @@
         copied = true;
       }
       try { if (!copied) document.execCommand('copy'); } catch (e) { /* manual copy */ }
-      el('ioAction').textContent = 'Copied ✓';
+      el('ioAction').textContent = 'Copied';
       setTimeout(function () { el('ioAction').textContent = 'Copy to clipboard'; }, 1500);
     } else {
       var parsed;
