@@ -148,9 +148,9 @@
     border-radius: 999px;
     border-color: var(--line2);
     box-shadow: 0 0 0 1px var(--accent);
-    min-width: 240px; max-width: none;
+    min-width: 0; max-width: none;
   }
-  .node.me .inner { padding: 11px 48px 13px; text-align: center; }
+  .node.me .inner { padding: 10px 34px 12px; text-align: center; }
   .node.me .kind { justify-content: center; margin-bottom: 2px; white-space: nowrap; }
   .node.me .nm { font-size: 18px; letter-spacing: -0.02em; white-space: nowrap; }
 
@@ -1325,6 +1325,7 @@
 
   /* ---------- boot ---------- */
   state = load();
+  if (state.meName === 'Burak') { state.meName = 'Burak Ekmen'; persist(); }
   if (state.view && typeof state.view.x === 'number') {
     view = { x: state.view.x, y: state.view.y, z: state.view.z || 1 };
   }
