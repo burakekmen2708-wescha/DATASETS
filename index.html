@@ -148,11 +148,11 @@
     border-radius: 999px;
     border-color: var(--line2);
     box-shadow: 0 0 0 1px var(--accent);
-    min-width: 0; max-width: none;
+    min-width: 240px; max-width: none;
   }
-  .node.me .inner { padding: 12px 28px 13px; text-align: center; }
-  .node.me .kind { justify-content: center; margin-bottom: 2px; }
-  .node.me .nm { font-size: 18px; letter-spacing: -0.02em; }
+  .node.me .inner { padding: 11px 48px 13px; text-align: center; }
+  .node.me .kind { justify-content: center; margin-bottom: 2px; white-space: nowrap; }
+  .node.me .nm { font-size: 18px; letter-spacing: -0.02em; white-space: nowrap; }
 
   @keyframes pulse {
     0% { box-shadow: 0 0 0 0 var(--accent-soft), 0 0 0 1px var(--accent); }
@@ -565,7 +565,7 @@
       return { id: uid(), name: s[0], type: s[1], notes: s[2], groups: s[3],
                x: p.x, y: p.y, createdAt: Date.now(), updatedAt: Date.now() };
     });
-    return { meName: 'Burak', datasets: ds, groups: [g1], view: null };
+    return { meName: 'Burak Ekmen', datasets: ds, groups: [g1], view: null };
   }
 
   function load() {
@@ -756,7 +756,7 @@
     meInner.className = 'inner';
     var meKind = document.createElement('div');
     meKind.className = 'kind';
-    meKind.textContent = 'knowledge graph of';
+    meKind.textContent = 'datasets of';
     meInner.appendChild(meKind);
     var meNm = document.createElement('div');
     meNm.className = 'nm';
