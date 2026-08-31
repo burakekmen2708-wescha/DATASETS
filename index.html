@@ -340,6 +340,77 @@
   .chip:hover { border-color: var(--line2); }
   .chip.on { border-color: currentColor; }
   .chip.newg { color: var(--muted); border-style: dashed; }
+  .chip .unlink {
+    display: inline-flex; align-items: center; justify-content: center;
+    border: none; background: none; padding: 0; margin-left: 2px;
+    color: var(--faint); cursor: pointer;
+  }
+  .chip .unlink:hover { color: var(--danger); }
+  .chip .unlink .ic { width: 11px; height: 11px; }
+
+  .composer { display: flex; flex-direction: column; gap: 8px; }
+  .composer textarea { min-height: 72px; }
+  .composer .btn { align-self: flex-end; padding: 6px 12px; }
+  #entries { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .entry {
+    border: 1px solid var(--line); border-radius: 2px;
+    background: var(--panel2); padding: 8px 11px 9px; position: relative;
+  }
+  .entry .edate {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 10px; color: var(--faint); margin-bottom: 4px;
+  }
+  .entry .edel {
+    position: absolute; top: 5px; right: 5px;
+    border: none; background: none; padding: 3px; cursor: pointer;
+    color: var(--faint); opacity: 0; transition: opacity .15s;
+    display: flex;
+  }
+  .entry:hover .edel, .entry .edel:focus-visible { opacity: 1; }
+  .entry .edel:hover { color: var(--danger); }
+  .entry .edel .ic { width: 12px; height: 12px; }
+  .entry .etext { font-size: 13px; line-height: 1.55; white-space: pre-line; cursor: text; }
+  .entry textarea {
+    width: 100%; background: var(--panel); border: 1px solid var(--accent); border-radius: 2px;
+    padding: 8px 10px; font-size: 13px; line-height: 1.55; min-height: 72px; resize: vertical;
+  }
+
+  #linkpicker { position: relative; margin-top: 6px; }
+  #linkpicker input {
+    width: 100%; background: var(--panel2); border: 1px solid var(--line); border-radius: 2px;
+    padding: 8px 11px; font-size: 13px;
+  }
+  #linksugg {
+    border: 1px solid var(--line2); border-radius: 2px; margin-top: 4px;
+    background: var(--panel); overflow: hidden;
+  }
+  #linksugg button {
+    display: flex; align-items: center; gap: 8px; width: 100%; text-align: left;
+    background: none; border: none; border-bottom: 1px solid var(--line);
+    padding: 8px 11px; font-size: 12.5px; cursor: pointer;
+  }
+  #linksugg button:last-child { border-bottom: none; }
+  #linksugg button:hover { background: var(--accent-soft); }
+
+  .grow { display: flex; align-items: center; gap: 8px; }
+  .grow input[type=color] {
+    width: 30px; height: 30px; padding: 2px; border: 1px solid var(--line); border-radius: 2px;
+    background: var(--panel2); cursor: pointer; flex: none;
+  }
+  .grow input[type=text] {
+    flex: 1; background: var(--panel2); border: 1px solid var(--line); border-radius: 2px;
+    padding: 7px 10px; font-size: 13px; min-width: 0;
+  }
+  .grow .cnt {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 10.5px; color: var(--faint); flex: none; width: 20px; text-align: right;
+  }
+  .grow .gdel {
+    border: 1px solid var(--line); border-radius: 2px; background: none;
+    width: 30px; height: 30px; cursor: pointer; color: var(--muted); flex: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .grow .gdel:hover { color: var(--danger); border-color: var(--danger); }
   .pmeta { font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 10.5px; color: var(--faint); }
   #panel .pfoot { padding: 12px 16px; border-top: 1px solid var(--line); display: flex; gap: 8px; }
   #panel .pfoot .btn { flex: 1; background: none; }
@@ -428,6 +499,7 @@
     <button class="btn icon" id="menuBtn" aria-label="Menu"><svg class="ic" viewBox="0 0 24 24"><use href="#i-more"/></svg></button>
     <div id="menu" hidden>
       <button id="mRename">Rename center node</button>
+      <button id="mGroups">Manage groups…</button>
       <button id="mFit">Fit everything on screen</button>
       <button id="mTheme">Theme: System</button>
       <hr>
@@ -456,7 +528,14 @@
     <div class="field"><label for="pname">Source name</label><input type="text" id="pname"></div>
     <div class="field"><label for="ptype">Source type</label><select id="ptype"></select></div>
     <div class="field"><label>Groups</label><div class="chips" id="pchips"></div></div>
-    <div class="field"><label for="pnotes">Extracted knowledge</label><textarea id="pnotes" placeholder="Lessons, quotes, ideas worth keeping…"></textarea></div>
+    <div class="field"><label>Connections</label><div class="chips" id="plinks"></div><div id="linkpicker" hidden><input type="text" id="linksearch" placeholder="Type a dataset name…" autocomplete="off"><div id="linksugg" hidden></div></div></div>
+    <div class="field"><label for="newEntry">Extracted knowledge</label>
+      <div class="composer">
+        <textarea id="newEntry" placeholder="What did you learn? Each entry is saved with its date."></textarea>
+        <button class="btn" id="addEntry">Add entry</button>
+      </div>
+      <div id="entries"></div>
+    </div>
     <div class="pmeta" id="pmeta"></div>
   </div>
   <div class="pfoot">
@@ -487,6 +566,19 @@
     <div class="mrow">
       <button class="btn" id="prCancel">Cancel</button>
       <button class="btn primary" id="prOk">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="groupsOverlay" hidden>
+  <div class="modal">
+    <span class="mtag">groups</span>
+    <h2>Manage groups</h2>
+    <p id="groupsHelp" style="margin:0;font-size:12.5px;color:var(--muted)">Rename, recolor, or delete groups. Deleting a group untags its datasets; the datasets themselves stay.</p>
+    <div id="grows" style="display:flex;flex-direction:column;gap:8px"></div>
+    <div class="mrow">
+      <button class="btn" id="gAdd">+ New group</button>
+      <button class="btn primary" id="gClose">Done</button>
     </div>
   </div>
 </div>
@@ -599,6 +691,37 @@
   function nextColor() {
     return PALETTE[state.groups.length % PALETTE.length];
   }
+  function migrate(s) {
+    s.datasets.forEach(function (d) {
+      if (!Array.isArray(d.entries)) {
+        d.entries = [];
+        if (d.notes && String(d.notes).trim()) {
+          d.entries.push({ id: uid(), text: String(d.notes).trim(), at: d.createdAt || Date.now() });
+        }
+        delete d.notes;
+      }
+      if (!Array.isArray(d.links)) d.links = [];
+    });
+    return s;
+  }
+  function entriesText(d) {
+    return (d.entries || []).map(function (e) { return e.text; }).join('\n');
+  }
+  function latestEntry(d) {
+    return (d.entries && d.entries.length) ? d.entries[d.entries.length - 1] : null;
+  }
+  function connectionsOf(d) {
+    var ids = {};
+    (d.links || []).forEach(function (id) { ids[id] = true; });
+    state.datasets.forEach(function (o) {
+      if (o.id !== d.id && (o.links || []).indexOf(d.id) !== -1) ids[o.id] = true;
+    });
+    return Object.keys(ids).map(dsById).filter(Boolean);
+  }
+  function unlink(a, b) {
+    a.links = (a.links || []).filter(function (id) { return id !== b.id; });
+    b.links = (b.links || []).filter(function (id) { return id !== a.id; });
+  }
   function createGroup(name) {
     var g = { id: uid(), name: name, color: nextColor() };
     state.groups.push(g);
@@ -668,13 +791,19 @@
   }
 
   /* ---------- render ---------- */
-  var nodeEls = {}, wireEls = {};
+  var nodeEls = {}, wireEls = {}, linkEls = {};
   var activeFilter = null;
 
   function wirePath(d) {
     var mx = d.x / 2 - d.y * 0.10, my = d.y / 2 + d.x * 0.10;
     return 'M 0 0 Q ' + mx + ' ' + my + ' ' + d.x + ' ' + d.y;
   }
+  function linkPath(a, b) {
+    var mx = (a.x + b.x) / 2 + (b.y - a.y) * 0.08;
+    var my = (a.y + b.y) / 2 - (b.x - a.x) * 0.08;
+    return 'M ' + a.x + ' ' + a.y + ' Q ' + mx + ' ' + my + ' ' + b.x + ' ' + b.y;
+  }
+  function isDim(d) { return activeFilter && d.groups.indexOf(activeFilter) === -1; }
 
   function buildNode(d) {
     var n = document.createElement('div');
@@ -707,7 +836,8 @@
     nm.className = 'nm';
     nm.textContent = d.name;
     inner.appendChild(nm);
-    var firstLine = (d.notes || '').trim().split('\n')[0];
+    var le = latestEntry(d);
+    var firstLine = le ? le.text.trim().split('\n')[0] : '';
     if (firstLine) {
       var pv = document.createElement('div');
       pv.className = 'prev';
@@ -734,7 +864,7 @@
   function render() {
     nodesDiv.textContent = '';
     wiresSvg.textContent = '';
-    nodeEls = {}; wireEls = {};
+    nodeEls = {}; wireEls = {}; linkEls = {};
 
     state.datasets.forEach(function (d) {
       var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -748,6 +878,23 @@
       if (activeFilter && d.groups.indexOf(activeFilter) === -1) p.classList.add('dimmed');
       wiresSvg.appendChild(p);
       wireEls[d.id] = p;
+    });
+
+    // dataset-to-dataset connections: dashed, undirected, drawn once per pair
+    state.datasets.forEach(function (a) {
+      (a.links || []).forEach(function (oid) {
+        var b = dsById(oid);
+        if (!b) return;
+        var key = a.id < oid ? a.id + '|' + oid : oid + '|' + a.id;
+        if (linkEls[key]) return;
+        var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        p.setAttribute('d', linkPath(a, b));
+        p.setAttribute('stroke', 'var(--wire)');
+        p.setAttribute('stroke-dasharray', '4 4');
+        if (isDim(a) || isDim(b)) p.classList.add('dimmed');
+        wiresSvg.appendChild(p);
+        linkEls[key] = p;
+      });
     });
 
     var me = document.createElement('div');
@@ -886,6 +1033,14 @@
       if (n) { n.style.left = pointer.node.x + 'px'; n.style.top = pointer.node.y + 'px'; }
       var w = wireEls[pointer.node.id];
       if (w) w.setAttribute('d', wirePath(pointer.node));
+      var nid = pointer.node.id;
+      for (var key in linkEls) {
+        var ids = key.split('|');
+        if (ids[0] === nid || ids[1] === nid) {
+          var a2 = dsById(ids[0]), b2 = dsById(ids[1]);
+          if (a2 && b2) linkEls[key].setAttribute('d', linkPath(a2, b2));
+        }
+      }
     } else if (!pointer.me) {
       view.x = pointer.startView.x + dx;
       view.y = pointer.startView.y + dy;
@@ -989,6 +1144,123 @@
     container.appendChild(add);
   }
 
+  function fmtDate(ts) {
+    return new Date(ts).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  function renderEntries(d) {
+    var wrap = el('entries');
+    wrap.textContent = '';
+    var list = (d.entries || []).slice().reverse(); // newest first
+    list.forEach(function (entry) {
+      var box = document.createElement('div');
+      box.className = 'entry';
+      var date = document.createElement('div');
+      date.className = 'edate';
+      date.textContent = fmtDate(entry.at);
+      box.appendChild(date);
+      var del = document.createElement('button');
+      del.className = 'edel';
+      del.setAttribute('aria-label', 'Delete entry');
+      del.appendChild(mkIcon('i-close'));
+      del.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        if (!confirm('Delete this entry?')) return;
+        d.entries = d.entries.filter(function (x) { return x.id !== entry.id; });
+        d.updatedAt = Date.now();
+        persist(); render(); renderEntries(d);
+      });
+      box.appendChild(del);
+      var text = document.createElement('div');
+      text.className = 'etext';
+      text.textContent = entry.text;
+      text.addEventListener('click', function () {
+        var ta = document.createElement('textarea');
+        ta.value = entry.text;
+        box.replaceChild(ta, text);
+        ta.focus();
+        ta.addEventListener('blur', function () {
+          var v = ta.value.trim();
+          if (!v) {
+            d.entries = d.entries.filter(function (x) { return x.id !== entry.id; });
+          } else {
+            entry.text = v;
+          }
+          d.updatedAt = Date.now();
+          persist(); render(); renderEntries(d);
+        });
+      });
+      box.appendChild(text);
+      wrap.appendChild(box);
+    });
+  }
+
+  function renderLinksUI(d) {
+    var wrap = el('plinks');
+    wrap.textContent = '';
+    connectionsOf(d).forEach(function (o) {
+      var c = document.createElement('span');
+      c.className = 'chip';
+      c.style.cursor = 'pointer';
+      var nameSpan = document.createElement('span');
+      nameSpan.textContent = o.name;
+      nameSpan.addEventListener('click', function () { focusNode(o.id); });
+      c.appendChild(nameSpan);
+      var un = document.createElement('button');
+      un.className = 'unlink';
+      un.setAttribute('aria-label', 'Remove connection');
+      un.appendChild(mkIcon('i-close'));
+      un.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        unlink(d, o);
+        d.updatedAt = Date.now();
+        persist(); render(); renderLinksUI(d);
+      });
+      c.appendChild(un);
+      wrap.appendChild(c);
+    });
+    var add = document.createElement('button');
+    add.type = 'button';
+    add.className = 'chip newg';
+    add.textContent = '+ Link dataset';
+    add.addEventListener('click', function () {
+      var lp = el('linkpicker');
+      lp.hidden = !lp.hidden;
+      if (!lp.hidden) { el('linksearch').value = ''; el('linksugg').hidden = true; el('linksearch').focus(); }
+    });
+    wrap.appendChild(add);
+  }
+
+  el('linksearch').addEventListener('input', function () {
+    var d = dsById(panelId);
+    if (!d) return;
+    var q = this.value.trim().toLowerCase();
+    var sugg = el('linksugg');
+    sugg.textContent = '';
+    if (!q) { sugg.hidden = true; return; }
+    var connected = {};
+    connectionsOf(d).forEach(function (o) { connected[o.id] = true; });
+    var matches = state.datasets.filter(function (o) {
+      return o.id !== d.id && !connected[o.id] && o.name.toLowerCase().indexOf(q) !== -1;
+    }).slice(0, 5);
+    if (!matches.length) { sugg.hidden = true; return; }
+    matches.forEach(function (o) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.appendChild(typeIconEl(o.type));
+      b.appendChild(document.createTextNode(o.name));
+      b.addEventListener('click', function () {
+        d.links = d.links || [];
+        d.links.push(o.id);
+        d.updatedAt = Date.now();
+        el('linkpicker').hidden = true;
+        persist(); render(); renderLinksUI(d);
+      });
+      sugg.appendChild(b);
+    });
+    sugg.hidden = false;
+  });
+
   function openPanel(id) {
     var d = dsById(id);
     if (!d) return;
@@ -997,7 +1269,10 @@
     setPtag(d);
     el('pname').value = d.name;
     el('ptype').value = d.type;
-    el('pnotes').value = d.notes || '';
+    el('newEntry').value = '';
+    el('linkpicker').hidden = true;
+    renderEntries(d);
+    renderLinksUI(d);
     var created = new Date(d.createdAt);
     el('pmeta').textContent = 'added ' + created.toLocaleDateString() +
       ' · updated ' + new Date(d.updatedAt).toLocaleDateString();
@@ -1011,6 +1286,18 @@
     }
     renderChips(el('pchips'), d.groups, toggleGroup);
   }
+
+  el('addEntry').addEventListener('click', function () {
+    var d = dsById(panelId);
+    if (!d) return;
+    var v = el('newEntry').value.trim();
+    if (!v) { el('newEntry').focus(); return; }
+    d.entries = d.entries || [];
+    d.entries.push({ id: uid(), text: v, at: Date.now() });
+    d.updatedAt = Date.now();
+    el('newEntry').value = '';
+    persist(); render(); renderEntries(d);
+  });
 
   function closePanel() { panel.hidden = true; panelId = null; }
   el('pclose').addEventListener('click', closePanel);
@@ -1039,19 +1326,14 @@
     persist();
     render();
   });
-  el('pnotes').addEventListener('input', function () {
-    var d = dsById(panelId);
-    if (!d) return;
-    d.notes = this.value;
-    d.updatedAt = Date.now();
-    persist();
-    scheduleRender();
-  });
   el('pdelete').addEventListener('click', function () {
     var d = dsById(panelId);
     if (!d) return;
     if (!confirm('Delete “' + d.name + '” and all its notes? This cannot be undone.')) return;
     state.datasets = state.datasets.filter(function (x) { return x.id !== d.id; });
+    state.datasets.forEach(function (o) {
+      o.links = (o.links || []).filter(function (lid) { return lid !== d.id; });
+    });
     persist();
     closePanel();
     render();
@@ -1081,10 +1363,12 @@
     var name = el('aname').value.trim();
     if (!name) { el('aname').focus(); return; }
     var p = addPos || nextPosition(state.datasets.length);
+    var firstNote = el('anotes').value.trim();
     var d = {
       id: uid(), name: name,
       type: el('atype').value,
-      notes: el('anotes').value,
+      entries: firstNote ? [{ id: uid(), text: firstNote, at: Date.now() }] : [],
+      links: [],
       groups: addGroups.slice(),
       x: p.x, y: p.y,
       createdAt: Date.now(), updatedAt: Date.now()
@@ -1151,6 +1435,74 @@
   }
   el('mRename').addEventListener('click', function () { closeMenu(); renameMe(); });
 
+  /* ---------- manage groups ---------- */
+  function renderGroupRows() {
+    var wrap = el('grows');
+    wrap.textContent = '';
+    if (!state.groups.length) {
+      var empty = document.createElement('div');
+      empty.style.cssText = 'font-size:12.5px;color:var(--muted)';
+      empty.textContent = 'No groups yet.';
+      wrap.appendChild(empty);
+      return;
+    }
+    state.groups.forEach(function (g) {
+      var row = document.createElement('div');
+      row.className = 'grow';
+      var color = document.createElement('input');
+      color.type = 'color';
+      color.value = g.color;
+      color.setAttribute('aria-label', 'Group color');
+      color.addEventListener('input', function () {
+        g.color = this.value;
+        persist(); render();
+      });
+      row.appendChild(color);
+      var name = document.createElement('input');
+      name.type = 'text';
+      name.value = g.name;
+      name.setAttribute('aria-label', 'Group name');
+      name.addEventListener('input', function () {
+        g.name = this.value;
+        persist(); render();
+      });
+      row.appendChild(name);
+      var cnt = document.createElement('span');
+      cnt.className = 'cnt';
+      cnt.textContent = String(state.datasets.filter(function (d) { return d.groups.indexOf(g.id) !== -1; }).length);
+      row.appendChild(cnt);
+      var del = document.createElement('button');
+      del.className = 'gdel';
+      del.setAttribute('aria-label', 'Delete group');
+      del.appendChild(mkIcon('i-close'));
+      del.addEventListener('click', function () {
+        if (!confirm('Delete group “' + g.name + '”? Its datasets stay, they just lose this tag.')) return;
+        state.groups = state.groups.filter(function (x) { return x.id !== g.id; });
+        state.datasets.forEach(function (d) {
+          d.groups = d.groups.filter(function (gid) { return gid !== g.id; });
+        });
+        if (activeFilter === g.id) activeFilter = null;
+        persist(); render(); renderGroupRows();
+      });
+      row.appendChild(del);
+      wrap.appendChild(row);
+    });
+  }
+  el('mGroups').addEventListener('click', function () {
+    closeMenu();
+    renderGroupRows();
+    el('groupsOverlay').hidden = false;
+  });
+  el('gAdd').addEventListener('click', function () {
+    createGroup('New group');
+    render();
+    renderGroupRows();
+  });
+  el('gClose').addEventListener('click', function () {
+    el('groupsOverlay').hidden = true;
+    if (panelId) openPanel(panelId); // refresh panel chips with new names/colors
+  });
+
   /* ---------- search ---------- */
   var searchInput = el('search'), resultsDiv = el('results');
   var activeResult = -1, currentMatches = [];
@@ -1184,7 +1536,7 @@
     if (!q) { hideResults(); return; }
     var matches = state.datasets.filter(function (d) {
       if (d.name.toLowerCase().indexOf(q) !== -1) return true;
-      if ((d.notes || '').toLowerCase().indexOf(q) !== -1) return true;
+      if (entriesText(d).toLowerCase().indexOf(q) !== -1) return true;
       return d.groups.some(function (gid) {
         var g = groupById(gid);
         return g && g.name.toLowerCase().indexOf(q) !== -1;
@@ -1310,7 +1662,7 @@
         return;
       }
       if (!confirm('Replace the current graph with the imported data?')) return;
-      state = parsed;
+      state = migrate(parsed);
       activeFilter = null;
       persist();
       el('ioOverlay').hidden = true;
@@ -1337,6 +1689,7 @@
       if (!el('addOverlay').hidden) el('addOverlay').hidden = true;
       else if (!el('promptOverlay').hidden) el('promptOverlay').hidden = true;
       else if (!el('ioOverlay').hidden) el('ioOverlay').hidden = true;
+      else if (!el('groupsOverlay').hidden) { el('groupsOverlay').hidden = true; if (panelId) openPanel(panelId); }
       else if (!panel.hidden) closePanel();
       else closeMenu();
     } else if (e.key === '/' && document.activeElement === document.body) {
@@ -1348,7 +1701,7 @@
   window.addEventListener('resize', function () { applyView(); });
 
   /* ---------- boot ---------- */
-  state = load();
+  state = migrate(load());
   if (state.meName === 'Burak') { state.meName = 'Burak Ekmen'; persist(); }
   if (state.view && typeof state.view.x === 'number') {
     view = { x: state.view.x, y: state.view.y, z: state.view.z || 1 };
