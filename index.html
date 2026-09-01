@@ -440,6 +440,109 @@
     padding: 10px 12px; min-height: 140px;
     font-family: 'IBM Plex Mono', ui-monospace, monospace; font-size: 11.5px;
   }
+  /* ---------- resurface ---------- */
+  .rsquote { font-size: 16px; line-height: 1.65; white-space: pre-line; }
+  .rsmeta {
+    display: flex; align-items: center; gap: 7px;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 10.5px; color: var(--muted);
+  }
+  .rsmeta .ic { width: 13px; height: 13px; }
+
+  /* ---------- monthly wrap: aurora scene, no boxes ---------- */
+  #wrap {
+    position: fixed; inset: 0; z-index: 120;
+    background: #04060d; overflow: hidden;
+    cursor: pointer; user-select: none;
+    color: #eef2f8;
+  }
+  #wrap .stars {
+    position: absolute; inset: 0; opacity: .8;
+    background-image:
+      radial-gradient(1px 1px at 22px 34px, rgba(255,255,255,.9), transparent),
+      radial-gradient(1px 1px at 180px 90px, rgba(255,255,255,.6), transparent),
+      radial-gradient(1.5px 1.5px at 320px 150px, rgba(255,255,255,.8), transparent),
+      radial-gradient(1px 1px at 460px 40px, rgba(255,255,255,.5), transparent),
+      radial-gradient(1px 1px at 90px 210px, rgba(255,255,255,.7), transparent),
+      radial-gradient(1.5px 1.5px at 540px 250px, rgba(255,255,255,.6), transparent),
+      radial-gradient(1px 1px at 250px 300px, rgba(255,255,255,.5), transparent),
+      radial-gradient(1px 1px at 410px 340px, rgba(255,255,255,.8), transparent);
+    background-size: 620px 380px;
+  }
+  #wrap .aur {
+    position: absolute; width: 150%; height: 55%;
+    filter: blur(70px); border-radius: 50%;
+    pointer-events: none;
+  }
+  #wrap .aur.a1 {
+    background: linear-gradient(105deg, transparent 12%, #23d5ab 38%, #58a6ff 62%, transparent 88%);
+    top: -14%; left: -25%; opacity: .5; transform: rotate(-10deg);
+    animation: wdrift1 16s ease-in-out infinite alternate;
+  }
+  #wrap .aur.a2 {
+    background: linear-gradient(80deg, transparent 10%, #7c5ce0 40%, #23d5ab 72%, transparent 92%);
+    top: 4%; right: -32%; opacity: .38; transform: rotate(7deg);
+    animation: wdrift2 21s ease-in-out infinite alternate;
+  }
+  #wrap .aur.a3 {
+    background: linear-gradient(95deg, transparent 15%, #58a6ff 50%, transparent 85%);
+    bottom: 38%; left: -18%; opacity: .22; transform: rotate(-4deg);
+    animation: wdrift3 26s ease-in-out infinite alternate;
+  }
+  @keyframes wdrift1 { to { transform: rotate(-3deg) translate(5%, 7%); } }
+  @keyframes wdrift2 { to { transform: rotate(12deg) translate(-6%, 4%); } }
+  @keyframes wdrift3 { to { transform: rotate(2deg) translate(7%, -5%); } }
+  #wrap .wstep {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 48px 28px; gap: 18px;
+    animation: wfade .8s ease both;
+  }
+  @keyframes wfade { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    #wrap .aur { animation: none; }
+    #wrap .wstep { animation: none; }
+  }
+  #wrap .wkick {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 11px; letter-spacing: .38em; text-transform: uppercase;
+    color: #57e6b4; padding-left: .38em;
+  }
+  #wrap .whero {
+    font-size: clamp(44px, 9vw, 92px); font-weight: 600;
+    letter-spacing: -0.03em; line-height: 1.04;
+    background: linear-gradient(100deg, #9be8ff 5%, #57e6b4 45%, #b79cff 95%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-wrap: balance;
+  }
+  #wrap .wbig {
+    font-size: clamp(26px, 5vw, 46px); font-weight: 500;
+    letter-spacing: -0.02em; line-height: 1.28; max-width: 840px; text-wrap: balance;
+  }
+  #wrap .wbig .num {
+    font-weight: 600;
+    background: linear-gradient(100deg, #9be8ff, #57e6b4);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  #wrap .wquote {
+    font-size: clamp(20px, 3.6vw, 33px); font-weight: 400;
+    line-height: 1.5; max-width: 780px; text-wrap: balance;
+  }
+  #wrap .wsub { font-size: 15px; color: rgba(238, 242, 248, .55); max-width: 600px; line-height: 1.6; }
+  #wrap .whint {
+    position: absolute; bottom: 26px; left: 0; right: 0; text-align: center;
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    font-size: 10.5px; letter-spacing: .3em; text-transform: uppercase;
+    color: rgba(255, 255, 255, .32); pointer-events: none;
+  }
+  #wclose {
+    position: absolute; top: 16px; right: 16px; z-index: 5;
+    background: none; border: none; cursor: pointer;
+    color: rgba(255, 255, 255, .45); padding: 8px;
+    display: flex;
+  }
+  #wclose:hover { color: rgba(255, 255, 255, .85); }
+
   #hintbubble {
     position: fixed; left: 50%; top: 62%; transform: translateX(-50%);
     background: var(--panel); border: 1px dashed var(--accent); border-radius: 2px;
@@ -498,6 +601,9 @@
   <div id="menuwrap">
     <button class="btn icon" id="menuBtn" aria-label="Menu"><svg class="ic" viewBox="0 0 24 24"><use href="#i-more"/></svg></button>
     <div id="menu" hidden>
+      <button id="mResurface">Resurface a lesson</button>
+      <button id="mWrap">Monthly wrap</button>
+      <hr>
       <button id="mRename">Rename center node</button>
       <button id="mGroups">Manage groups…</button>
       <button id="mFit">Fit everything on screen</button>
@@ -568,6 +674,28 @@
       <button class="btn primary" id="prOk">Save</button>
     </div>
   </div>
+</div>
+
+<div class="overlay" id="rsOverlay" hidden>
+  <div class="modal">
+    <span class="mtag">resurface — from your graph</span>
+    <div class="rsquote" id="rsQuote"></div>
+    <div class="rsmeta" id="rsMeta"></div>
+    <div class="mrow">
+      <button class="btn" id="rsOpen">Open dataset</button>
+      <button class="btn primary" id="rsGot">Got it</button>
+    </div>
+  </div>
+</div>
+
+<div id="wrap" hidden>
+  <div class="stars"></div>
+  <div class="aur a1"></div>
+  <div class="aur a2"></div>
+  <div class="aur a3"></div>
+  <button id="wclose" aria-label="Close wrap"><svg class="ic" viewBox="0 0 24 24"><use href="#i-close"/></svg></button>
+  <div id="wsteps"></div>
+  <div class="whint">tap anywhere to continue</div>
 </div>
 
 <div class="overlay" id="groupsOverlay" hidden>
@@ -1435,6 +1563,186 @@
   }
   el('mRename').addEventListener('click', function () { closeMenu(); renameMe(); });
 
+  /* ---------- resurface: lesson of the day ---------- */
+  var rsDatasetId = null;
+
+  function pickResurface() {
+    var pool = [];
+    state.datasets.forEach(function (d) {
+      (d.entries || []).forEach(function (e) { pool.push({ d: d, e: e }); });
+    });
+    if (!pool.length) return null;
+    // least-recently-resurfaced first (never-shown wins), then take one of the
+    // stalest third at random so it doesn't become a fixed rotation
+    pool.sort(function (a, b) { return (a.e.seenAt || 0) - (b.e.seenAt || 0); });
+    var cut = pool.slice(0, Math.max(1, Math.ceil(pool.length * 0.34)));
+    return cut[Math.floor(Math.random() * cut.length)];
+  }
+
+  function showResurface() {
+    var pick = pickResurface();
+    if (!pick) return false;
+    pick.e.seenAt = Date.now();
+    pick.e.seenCount = (pick.e.seenCount || 0) + 1;
+    persist();
+    rsDatasetId = pick.d.id;
+    el('rsQuote').textContent = pick.e.text;
+    var meta = el('rsMeta');
+    meta.textContent = '';
+    meta.appendChild(typeIconEl(pick.d.type));
+    meta.appendChild(document.createTextNode(pick.d.name + ' · captured ' + fmtDate(pick.e.at)));
+    el('rsOverlay').hidden = false;
+    return true;
+  }
+  el('rsGot').addEventListener('click', function () { el('rsOverlay').hidden = true; });
+  el('rsOpen').addEventListener('click', function () {
+    el('rsOverlay').hidden = true;
+    if (rsDatasetId) focusNode(rsDatasetId);
+  });
+  el('mResurface').addEventListener('click', function () {
+    closeMenu();
+    if (!showResurface()) {
+      promptModal('resurface', 'Nothing to resurface yet — add some lessons first.', '', function () {});
+    }
+  });
+
+  /* ---------- monthly wrap ---------- */
+  function monthKeyOf(y, m) { return y + '-' + ('0' + (m + 1)).slice(-2); }
+
+  function monthStats(y, m) {
+    var start = new Date(y, m, 1).getTime();
+    var end = new Date(y, m + 1, 1).getTime();
+    var entryCount = 0, sources = {}, groupCounts = {}, longest = null;
+    var newDatasets = 0;
+    state.datasets.forEach(function (d) {
+      if (d.createdAt >= start && d.createdAt < end) newDatasets++;
+      (d.entries || []).forEach(function (e) {
+        if (e.at < start || e.at >= end) return;
+        entryCount++;
+        sources[d.id] = (sources[d.id] || 0) + 1;
+        d.groups.forEach(function (gid) { groupCounts[gid] = (groupCounts[gid] || 0) + 1; });
+        if (!longest || e.text.length > longest.e.text.length) longest = { d: d, e: e };
+      });
+    });
+    var topSource = null, topSourceN = 0;
+    Object.keys(sources).forEach(function (id) {
+      if (sources[id] > topSourceN) { topSourceN = sources[id]; topSource = dsById(id); }
+    });
+    var topGroup = null, topGroupN = 0;
+    Object.keys(groupCounts).forEach(function (gid) {
+      if (groupCounts[gid] > topGroupN) { topGroupN = groupCounts[gid]; topGroup = groupById(gid); }
+    });
+    return {
+      entryCount: entryCount, sourceCount: Object.keys(sources).length, newDatasets: newDatasets,
+      topSource: topSource, topSourceN: topSourceN,
+      topGroup: topGroup, topGroupN: topGroupN,
+      longest: longest
+    };
+  }
+
+  var wrapSteps = [], wrapIdx = 0;
+
+  function wEl(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text) n.textContent = text;
+    return n;
+  }
+
+  function buildWrapSteps(y, m, s) {
+    var monthName = new Date(y, m, 1).toLocaleDateString(undefined, { month: 'long' });
+    var steps = [];
+
+    steps.push(function (step) {
+      step.appendChild(wEl('div', 'wkick', 'your month in datasets'));
+      step.appendChild(wEl('div', 'whero', monthName + ' ' + y));
+      step.appendChild(wEl('div', 'wsub', 'What you wired into your graph, before it could slip away.'));
+    });
+
+    steps.push(function (step) {
+      step.appendChild(wEl('div', 'wkick', 'captured'));
+      var big = wEl('div', 'wbig');
+      var n1 = wEl('span', 'num', String(s.entryCount));
+      var n2 = wEl('span', 'num', String(s.sourceCount));
+      big.appendChild(n1);
+      big.appendChild(document.createTextNode(' lesson' + (s.entryCount === 1 ? '' : 's') + ' from '));
+      big.appendChild(n2);
+      big.appendChild(document.createTextNode(' source' + (s.sourceCount === 1 ? '' : 's') + '.'));
+      step.appendChild(big);
+      if (s.newDatasets) step.appendChild(wEl('div', 'wsub', s.newDatasets + ' of those source' + (s.newDatasets === 1 ? ' is' : 's are') + ' new to your graph.'));
+    });
+
+    if (s.topSource) {
+      steps.push(function (step) {
+        step.appendChild(wEl('div', 'wkick', 'your most fed source'));
+        step.appendChild(wEl('div', 'whero', s.topSource.name));
+        step.appendChild(wEl('div', 'wsub', s.topSourceN + ' lesson' + (s.topSourceN === 1 ? '' : 's') + ' this month — this is who your mind kept returning to.'));
+      });
+    }
+
+    if (s.topGroup) {
+      steps.push(function (step) {
+        step.appendChild(wEl('div', 'wkick', 'where it wired together'));
+        var hero = wEl('div', 'whero', s.topGroup.name);
+        step.appendChild(hero);
+        step.appendChild(wEl('div', 'wsub', s.topGroupN + ' lesson' + (s.topGroupN === 1 ? '' : 's') + ' joined this thread of your graph.'));
+      });
+    }
+
+    if (s.longest) {
+      steps.push(function (step) {
+        step.appendChild(wEl('div', 'wkick', 'one worth re-reading'));
+        var q = s.longest.e.text.trim().split('\n')[0];
+        if (q.length > 180) q = q.slice(0, 177) + '…';
+        step.appendChild(wEl('div', 'wquote', '“' + q + '”'));
+        step.appendChild(wEl('div', 'wsub', '— ' + s.longest.d.name));
+      });
+    }
+
+    steps.push(function (step) {
+      step.appendChild(wEl('div', 'wkick', 'that’s a wrap'));
+      step.appendChild(wEl('div', 'whero', 'Keep feeding the graph.'));
+      step.appendChild(wEl('div', 'wsub', 'Every lesson you capture here is one that doesn’t fade. See you next month.'));
+    });
+
+    return steps;
+  }
+
+  function showWrapStep() {
+    var host = el('wsteps');
+    host.textContent = '';
+    var step = wEl('div', 'wstep');
+    wrapSteps[wrapIdx](step);
+    host.appendChild(step);
+  }
+
+  function openWrap(y, m) {
+    var s = monthStats(y, m);
+    if (!s.entryCount) return false;
+    wrapSteps = buildWrapSteps(y, m, s);
+    wrapIdx = 0;
+    el('wrap').hidden = false;
+    showWrapStep();
+    return true;
+  }
+  function closeWrap() { el('wrap').hidden = true; }
+
+  el('wrap').addEventListener('click', function (e) {
+    if (e.target.closest('#wclose')) { closeWrap(); return; }
+    wrapIdx++;
+    if (wrapIdx >= wrapSteps.length) closeWrap();
+    else showWrapStep();
+  });
+
+  el('mWrap').addEventListener('click', function () {
+    closeMenu();
+    var now = new Date();
+    if (openWrap(now.getFullYear(), now.getMonth())) return;
+    var prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    if (openWrap(prev.getFullYear(), prev.getMonth())) return;
+    promptModal('monthly wrap', 'No lessons this month yet — your wrap builds as you capture.', '', function () {});
+  });
+
   /* ---------- manage groups ---------- */
   function renderGroupRows() {
     var wrap = el('grows');
@@ -1689,6 +1997,8 @@
       if (!el('addOverlay').hidden) el('addOverlay').hidden = true;
       else if (!el('promptOverlay').hidden) el('promptOverlay').hidden = true;
       else if (!el('ioOverlay').hidden) el('ioOverlay').hidden = true;
+      else if (!el('wrap').hidden) closeWrap();
+      else if (!el('rsOverlay').hidden) el('rsOverlay').hidden = true;
       else if (!el('groupsOverlay').hidden) { el('groupsOverlay').hidden = true; if (panelId) openPanel(panelId); }
       else if (!panel.hidden) closePanel();
       else closeMenu();
@@ -1708,6 +2018,26 @@
   }
   applyView();
   render();
+
+  // last month's wrap, once, if it had lessons; otherwise today's first
+  // open gets the daily resurface card
+  setTimeout(function () {
+    var now = new Date();
+    var prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    var prevKey = monthKeyOf(prev.getFullYear(), prev.getMonth());
+    state.wrapSeen = state.wrapSeen || {};
+    if (!state.wrapSeen[prevKey]) {
+      state.wrapSeen[prevKey] = true;
+      persist();
+      if (openWrap(prev.getFullYear(), prev.getMonth())) return;
+    }
+    var today = now.toDateString();
+    if (state.lastResurfaceDay !== today) {
+      state.lastResurfaceDay = today;
+      persist();
+      showResurface();
+    }
+  }, 500);
 })();
 </script>
 

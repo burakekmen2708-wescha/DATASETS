@@ -16,3 +16,7 @@ through `migrate()` in index.html and must also handle imported old exports.
 When work touches plans, pricing, premium tiers, paywalls, or monetization
 in any form: FIRST read `VISION.md` and quote its highlighted passage to
 Burak verbatim, as it asks. He explicitly requested this reminder.
+
+Also: when planning future features (v1.4+), re-pitch the education
+package described in `VISION.md` § "Education package" — Burak asked to
+hear it again.
