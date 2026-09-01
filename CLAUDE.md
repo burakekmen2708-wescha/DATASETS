@@ -26,3 +26,11 @@ Burak verbatim, as it asks. He explicitly requested this reminder.
 Also: when planning future features (v1.4+), re-pitch the education
 package described in `VISION.md` § "Education package" — Burak asked to
 hear it again.
+
+## REMINDER: constellation sky & aurora colors
+
+Burak explicitly asked to be reminded that he wants to PLAY WITH the
+constellation view's sky and aurora colors (the `#cosmosbg` gradients and
+the aurora band colors in `drawCosmos`/CSS). Next time work touches the
+constellation view or visuals in general, bring this up proactively —
+e.g. offer a few alternative sky/aurora palettes to pick from.

@@ -543,6 +543,48 @@
   }
   #wclose:hover { color: rgba(255, 255, 255, .85); }
 
+  /* ---------- constellation (cosmos) view ---------- */
+  #cosmosbg {
+    position: absolute; inset: 0; opacity: 0;
+    transition: opacity .8s ease; pointer-events: none;
+    background: radial-gradient(120% 90% at 50% 8%, #0a1322 0%, #04060d 62%);
+    overflow: hidden;
+  }
+  #cosmosbg .cstars {
+    position: absolute; inset: 0; opacity: .55;
+    background-image:
+      radial-gradient(1px 1px at 40px 60px, rgba(255,255,255,.8), transparent),
+      radial-gradient(1px 1px at 210px 140px, rgba(255,255,255,.5), transparent),
+      radial-gradient(1.5px 1.5px at 360px 40px, rgba(255,255,255,.7), transparent),
+      radial-gradient(1px 1px at 500px 220px, rgba(255,255,255,.4), transparent),
+      radial-gradient(1px 1px at 120px 300px, rgba(255,255,255,.6), transparent),
+      radial-gradient(1.5px 1.5px at 430px 330px, rgba(255,255,255,.5), transparent);
+    background-size: 560px 400px;
+  }
+  #cosmosbg .aur { position: absolute; width: 150%; height: 50%; filter: blur(80px); border-radius: 50%; }
+  #cosmosbg .aur.a1 {
+    background: linear-gradient(100deg, transparent 15%, #23d5ab 45%, #58a6ff 70%, transparent 92%);
+    top: -16%; left: -25%; opacity: .14; transform: rotate(-8deg);
+    animation: wdrift1 22s ease-in-out infinite alternate;
+  }
+  #cosmosbg .aur.a2 {
+    background: linear-gradient(85deg, transparent 12%, #7c5ce0 45%, transparent 88%);
+    bottom: -10%; right: -28%; opacity: .10; transform: rotate(5deg);
+    animation: wdrift2 28s ease-in-out infinite alternate;
+  }
+  body.cosmos #cosmosbg { opacity: 1; }
+  #cosmosCanvas {
+    position: fixed; inset: 52px 0 0 0; width: 100vw; height: calc(100vh - 52px);
+    pointer-events: none; opacity: 0; transition: opacity .8s ease; z-index: 4;
+  }
+  body.cosmos #cosmosCanvas { opacity: 1; }
+  #wires { transition: opacity .7s; }
+  body.cosmos #wires { opacity: 0; }
+  body.cosmos .node { opacity: 0 !important; transition: opacity .6s; }
+  @media (prefers-reduced-motion: reduce) {
+    #cosmosbg .aur { animation: none; }
+  }
+
   #hintbubble {
     position: fixed; left: 50%; top: 62%; transform: translateX(-50%);
     background: var(--panel); border: 1px dashed var(--accent); border-radius: 2px;
@@ -579,11 +621,17 @@
 </svg>
 
 <div id="canvas">
+  <div id="cosmosbg">
+    <div class="cstars"></div>
+    <div class="aur a1"></div>
+    <div class="aur a2"></div>
+  </div>
   <div id="world">
     <svg id="wires"></svg>
     <div id="nodes"></div>
   </div>
 </div>
+<canvas id="cosmosCanvas"></canvas>
 
 <header id="topbar">
   <div id="logo">
@@ -603,6 +651,7 @@
     <div id="menu" hidden>
       <button id="mResurface">Resurface a lesson</button>
       <button id="mWrap">Monthly wrap</button>
+      <button id="mCosmos">Constellation view</button>
       <hr>
       <button id="mRename">Rename center node</button>
       <button id="mGroups">Manage groups…</button>
@@ -868,6 +917,7 @@
     canvas.style.backgroundPosition = view.x + 'px ' + view.y + 'px';
     state.view = { x: view.x, y: view.y, z: view.z };
     persist();
+    if (typeof checkCosmos === 'function') checkCosmos();
   }
   function screenToWorld(sx, sy) {
     return { x: (sx - view.x) / view.z, y: (sy - 52 - view.y) / view.z };
@@ -1742,6 +1792,154 @@
     if (openWrap(prev.getFullYear(), prev.getMonth())) return;
     promptModal('monthly wrap', 'No lessons this month yet — your wrap builds as you capture.', '', function () {});
   });
+
+  /* ---------- constellation (cosmos) view ---------- */
+  var cosmosOn = false, cosmosRaf = null;
+  var cosmosCanvas = el('cosmosCanvas');
+  var cctx = cosmosCanvas.getContext('2d');
+
+  function hash01(s) {
+    var h = 0;
+    for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return (h % 1000) / 1000;
+  }
+  function firstGroupColor(d) {
+    for (var i = 0; i < d.groups.length; i++) {
+      var g = groupById(d.groups[i]);
+      if (g) return g.color;
+    }
+    return null;
+  }
+  function resizeCosmos() {
+    var dpr = window.devicePixelRatio || 1;
+    cosmosCanvas.width = Math.round(window.innerWidth * dpr);
+    cosmosCanvas.height = Math.round(viewH() * dpr);
+  }
+
+  function drawStar(x, y, radius, color, alpha) {
+    var glow = cctx.createRadialGradient(x, y, 0, x, y, radius * 7);
+    glow.addColorStop(0, color);
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    cctx.globalAlpha = alpha * 0.35;
+    cctx.fillStyle = glow;
+    cctx.beginPath();
+    cctx.arc(x, y, radius * 7, 0, 6.2832);
+    cctx.fill();
+    cctx.globalAlpha = alpha;
+    cctx.fillStyle = '#f2f7ff';
+    cctx.beginPath();
+    cctx.arc(x, y, radius, 0, 6.2832);
+    cctx.fill();
+  }
+
+  function drawCosmos(t) {
+    var dpr = window.devicePixelRatio || 1;
+    var w = window.innerWidth, h = viewH();
+    cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    cctx.clearRect(0, 0, w, h);
+    function px(wx, wy) { return { x: wx * view.z + view.x, y: wy * view.z + view.y }; }
+    var c = px(0, 0);
+
+    // spokes: faint constellation lines from the pole star
+    cctx.lineWidth = 1;
+    state.datasets.forEach(function (d) {
+      var p = px(d.x, d.y);
+      cctx.strokeStyle = firstGroupColor(d) || '#4a5f7a';
+      cctx.globalAlpha = 0.26;
+      cctx.beginPath();
+      cctx.moveTo(c.x, c.y);
+      cctx.lineTo(p.x, p.y);
+      cctx.stroke();
+    });
+
+    // dataset-to-dataset links: dashed, fainter
+    cctx.setLineDash([3, 6]);
+    cctx.strokeStyle = '#5b6f88';
+    cctx.globalAlpha = 0.28;
+    var drawn = {};
+    state.datasets.forEach(function (a) {
+      (a.links || []).forEach(function (oid) {
+        var b = dsById(oid);
+        if (!b) return;
+        var key = a.id < oid ? a.id + '|' + oid : oid + '|' + a.id;
+        if (drawn[key]) return;
+        drawn[key] = true;
+        var pa = px(a.x, a.y), pb = px(b.x, b.y);
+        cctx.beginPath();
+        cctx.moveTo(pa.x, pa.y);
+        cctx.lineTo(pb.x, pb.y);
+        cctx.stroke();
+      });
+    });
+    cctx.setLineDash([]);
+
+    // source stars, tinted by group, gently twinkling
+    cctx.font = '10px "IBM Plex Mono", ui-monospace, monospace';
+    cctx.textAlign = 'center';
+    state.datasets.forEach(function (d) {
+      var p = px(d.x, d.y);
+      var ph = hash01(d.id);
+      var tw = reduced ? 1 : (0.78 + 0.22 * Math.sin(t / 900 + ph * 6.2832));
+      drawStar(p.x, p.y, 2.6 + 1.4 * tw, firstGroupColor(d) || '#9fc6ff', 0.95 * tw);
+      cctx.globalAlpha = 0.62;
+      cctx.fillStyle = '#c8d6e8';
+      cctx.fillText(d.name, p.x, p.y + 18);
+    });
+
+    // pole star: you, brighter, with a glint
+    var ctw = reduced ? 1 : (0.85 + 0.15 * Math.sin(t / 1400));
+    drawStar(c.x, c.y, 4.4 * ctw, '#9be8ff', 1);
+    cctx.globalAlpha = 0.5 * ctw;
+    cctx.strokeStyle = '#cfeaff';
+    cctx.lineWidth = 1;
+    cctx.beginPath();
+    cctx.moveTo(c.x - 14, c.y); cctx.lineTo(c.x + 14, c.y);
+    cctx.moveTo(c.x, c.y - 14); cctx.lineTo(c.x, c.y + 14);
+    cctx.stroke();
+    cctx.globalAlpha = 0.75;
+    cctx.fillStyle = '#e8f2ff';
+    cctx.font = '11px "IBM Plex Mono", ui-monospace, monospace';
+    cctx.fillText(state.meName, c.x, c.y + 24);
+    cctx.globalAlpha = 1;
+  }
+
+  function cosmosLoop(t) {
+    drawCosmos(t || 0);
+    cosmosRaf = requestAnimationFrame(cosmosLoop);
+  }
+  function setCosmos(on) {
+    if (on === cosmosOn) return;
+    cosmosOn = on;
+    document.body.classList.toggle('cosmos', on);
+    cancelAnimationFrame(cosmosRaf);
+    if (on) {
+      resizeCosmos();
+      if (reduced) drawCosmos(0);
+      else cosmosRaf = requestAnimationFrame(cosmosLoop);
+    }
+  }
+  function checkCosmos() {
+    // hysteresis so the crossfade doesn't flicker at the boundary
+    setCosmos(view.z < (cosmosOn ? 0.42 : 0.36));
+    if (cosmosOn && reduced) drawCosmos(0);
+  }
+  el('mCosmos').addEventListener('click', function () {
+    closeMenu();
+    closePanel();
+    var minX = -160, maxX = 160, minY = -80, maxY = 80;
+    state.datasets.forEach(function (d) {
+      minX = Math.min(minX, d.x - 120); maxX = Math.max(maxX, d.x + 120);
+      minY = Math.min(minY, d.y - 70);  maxY = Math.max(maxY, d.y + 70);
+    });
+    var w = maxX - minX, h = maxY - minY;
+    var z = Math.min(clamp(Math.min(window.innerWidth / w, viewH() / h) * 0.9, 0.22, 1.3), 0.3);
+    animateView({
+      x: window.innerWidth / 2 - (minX + w / 2) * z,
+      y: viewH() / 2 - (minY + h / 2) * z,
+      z: z
+    }, 900);
+  });
+  window.addEventListener('resize', function () { if (cosmosOn) { resizeCosmos(); drawCosmos(0); } });
 
   /* ---------- manage groups ---------- */
   function renderGroupRows() {
