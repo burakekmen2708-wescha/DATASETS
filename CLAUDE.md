@@ -11,6 +11,12 @@ Design language: "Console" — IBM Plex Sans/Mono, flat squared surfaces
 the UI. Data lives in localStorage (`datasets-app-v1`); schema changes go
 through `migrate()` in index.html and must also handle imported old exports.
 
+Design taste (Burak, after v1.3): the aurora Monthly Wrap landed very
+well — "exotic" immersive moments (full-bleed scenes, glowing gradient
+typography, no boxes) are WELCOMED for celebratory/reflective surfaces.
+Keep the Console restraint for daily-use UI, but don't be timid on
+special moments. Avoid anything that reads as generic AI-artifact styling.
+
 ## IMPORTANT: monetization reminder
 
 When work touches plans, pricing, premium tiers, paywalls, or monetization
