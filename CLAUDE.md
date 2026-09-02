@@ -27,6 +27,14 @@ Also: when planning future features (v1.4+), re-pitch the education
 package described in `VISION.md` § "Education package" — Burak asked to
 hear it again.
 
+## REMINDER: "DATASETS Business" — ASK BURAK AT THE START OF THE NEXT CONVERSATION
+
+Burak named something called **"DATASETS Business"** (2026-09-01) and asked to
+be reminded of it in the next conversation — he will explain what it is then.
+Nothing else is known about it yet. At the start of the next session on this
+project, proactively ask: "You wanted me to remind you about 'DATASETS
+Business' — what is it?" Do not guess at its meaning before he explains.
+
 ## REMINDER: constellation sky & aurora colors
 
 Burak explicitly asked to be reminded that he wants to PLAY WITH the
