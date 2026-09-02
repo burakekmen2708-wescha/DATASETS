@@ -1,0 +1,10 @@
+{
+  "appId": "com.burakekmen.datasets",
+  "appName": "DATASETS",
+  "webDir": "www",
+  "backgroundColor": "#0e1114",
+  "ios": {
+    "contentInset": "never",
+    "backgroundColor": "#0e1114"
+  }
+}

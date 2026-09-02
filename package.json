@@ -1,0 +1,15 @@
+{
+  "name": "datasets",
+  "version": "1.4.0",
+  "private": true,
+  "description": "DATASETS — personal knowledge graph",
+  "scripts": {
+    "build:www": "rm -rf www && mkdir -p www && cp index.html manifest.webmanifest sw.js www/ && cp -r icons www/",
+    "ios": "npm run build:www && npx cap sync ios"
+  },
+  "dependencies": {
+    "@capacitor/cli": "^8.5.1",
+    "@capacitor/core": "^8.5.1",
+    "@capacitor/ios": "^8.5.1"
+  }
+}
