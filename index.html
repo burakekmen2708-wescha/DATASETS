@@ -181,7 +181,7 @@
   /* ---------- floating glass top bar ---------- */
   #topbar {
     position: fixed;
-    top: calc(var(--sat) + 8px); left: 10px; right: 10px;
+    top: calc(var(--sat) + 2px); left: 10px; right: 10px;
     height: 56px;
     display: flex; align-items: center; gap: 10px;
     padding: 0 10px 0 16px;
@@ -2273,8 +2273,8 @@
       saProbe.style.cssText = 'position:fixed;top:0;left:0;height:env(safe-area-inset-top,0px);width:1px;visibility:hidden;pointer-events:none;';
       document.body.appendChild(saProbe);
       if (saProbe.offsetHeight < 20) {
-        document.documentElement.style.setProperty('--sat', '59px');
-        document.documentElement.style.setProperty('--sab', '28px');
+        document.documentElement.style.setProperty('--sat', '54px');
+        document.documentElement.style.setProperty('--sab', '24px');
       }
       saProbe.remove();
     }
