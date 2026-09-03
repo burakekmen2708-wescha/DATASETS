@@ -35,10 +35,9 @@ Nothing else is known about it yet. At the start of the next session on this
 project, proactively ask: "You wanted me to remind you about 'DATASETS
 Business' — what is it?" Do not guess at its meaning before he explains.
 
-## REMINDER: constellation sky & aurora colors
+## RESOLVED: constellation sky & aurora colors
 
-Burak explicitly asked to be reminded that he wants to PLAY WITH the
-constellation view's sky and aurora colors (the `#cosmosbg` gradients and
-the aurora band colors in `drawCosmos`/CSS). Next time work touches the
-constellation view or visuals in general, bring this up proactively —
-e.g. offer a few alternative sky/aurora palettes to pick from.
+Burak reviewed three palette demos (Polar / Ember / Emerald) and chose to
+KEEP POLAR (the current teal/blue/violet aurora) — decided 2026-09-04.
+Do not re-pitch palettes unprompted; alternates exist in the session
+archive if he ever asks again.
