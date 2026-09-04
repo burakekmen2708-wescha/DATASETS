@@ -200,9 +200,7 @@
     white-space: nowrap;
   }
   #logo .mark { width: 19px; height: 19px; flex: none; }
-  #logo .mark path { stroke: var(--accent); stroke-width: 1.8; fill: none; stroke-linecap: round; }
-  #logo .mark rect { fill: var(--accent); }
-  #logo .mark circle { fill: var(--accent); }
+  #logo .mark path { stroke: var(--accent); fill: none; stroke-linecap: round; }
   #searchwrap { position: relative; flex: 0 1 420px; min-width: 130px; }
   #search {
     width: 100%;
@@ -688,7 +686,7 @@
 
 <header id="topbar">
   <div id="logo">
-    <svg class="mark" viewBox="0 0 24 24"><path d="M12 12L6.2 6.2M12 12l6.3-3.4M12 12l-5.3 5.8M12 12l6.6 5.2"/><rect x="4.3" y="4.3" width="3.8" height="3.8" rx="1.1"/><rect x="16.4" y="6.7" width="3.8" height="3.8" rx="1.1"/><rect x="4.8" y="15.9" width="3.8" height="3.8" rx="1.1"/><rect x="16.7" y="15.3" width="3.8" height="3.8" rx="1.1"/><circle cx="12" cy="12" r="2.9"/></svg>
+    <svg class="mark" viewBox="0 0 24 24"><defs><filter id="gooMark" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceGraphic" stdDeviation="0.55" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"/></filter></defs><g filter="url(#gooMark)"><path stroke-width="2.4" d="M12 12Q8.2 10.4 6.2 6.2"/><path stroke-width="2" d="M12 12Q15.6 11.2 18.3 8.6"/><path stroke-width="2.2" d="M12 12Q8.4 14.2 6.7 17.8"/><path stroke-width="2.7" d="M12 12Q15 15.8 18.6 17.2"/></g></svg>
     DATASETS
   </div>
   <div id="searchwrap">

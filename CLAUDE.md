@@ -35,12 +35,12 @@ Nothing else is known about it yet. At the start of the next session on this
 project, proactively ask: "You wanted me to remind you about 'DATASETS
 Business' — what is it?" Do not guess at its meaning before he explains.
 
-## LOGO CANDIDATE (chosen 2026-09-04, NOT YET APPLIED)
+## LOGO: "Wild branches + Smoother blend" — APPLIED 2026-09-04
 
-Burak picked the "Wild branches + Smoother blend" mark as the candidate to
-replace the current box mark. DO NOT apply it anywhere until he explicitly
-says so — the current box mark stays live in the app, icons, and splash.
-Recipe (viewBox "-4.5 -4.5 33 33", stroke #58a6ff, round caps, fill none):
+Burak picked this mark and asked to apply it immediately. It is now live in
+the in-app topbar (`#logo .mark`), PWA icons, iOS AppIcon, and Splash — all
+generated from the same glyph so the brand stays unified.
+Recipe (stroke #58a6ff / var(--accent) in-app, round caps, fill none):
 
 - Branches (do not change angles/shapes/widths):
   - stroke-width 2.4: `M12 12 Q 8.2 10.4 6.2 6.2`
@@ -50,8 +50,8 @@ Recipe (viewBox "-4.5 -4.5 33 33", stroke #58a6ff, round caps, fill none):
 - Gooey junction filter on the group (kills the crease where branches meet):
   `feGaussianBlur stdDeviation="0.55"` then `feColorMatrix` values
   `1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10`.
-- When applying for real, bake the filtered result into a static path (or
-  keep the filter — but test it renders on iOS WKWebView + as PNG icons).
+- Icons/splash are rasterized PNGs (filter pre-baked); the in-app mark keeps
+  the live SVG filter (verified crisp at 19px).
 
 ## RESOLVED: constellation sky & aurora colors
 
