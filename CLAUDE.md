@@ -6,10 +6,30 @@ shipping asset changes), deployed to GitHub Pages by
 `.github/workflows/pages.yml` on every push to `main`.
 Live: https://burakekmen2708-wescha.github.io/DATASETS/
 
-Design language: "Console" — IBM Plex Sans/Mono, flat squared surfaces
-(2px radii), line grid, steel-blue accent, inline SVG icons, no emoji in
-the UI. Data lives in localStorage (`datasets-app-v1`); schema changes go
-through `migrate()` in index.html and must also handle imported old exports.
+Design language (v2.0 "Glass", replaced the earlier Console look): Apple
+Liquid-Glass style — system font stack, translucent `--glass` surfaces
+with backdrop blur, capsule buttons, 16px cards, floating top bar under
+the safe area, blue accent, inline SVG icons, no emoji in the UI. Data
+lives in localStorage (`datasets-app-v1`); schema changes go through
+`migrate()` in index.html and must also handle imported old exports.
+
+`index.html` is the single canonical source (web, PWA, and the iOS bundle
+via `npm run ios`). The Claude artifact preview page is derived from it
+with `node tools/artifact.js > artifact.html` (adds a `<title>`, drops the
+PWA head and service-worker tail) and published to the artifact URL used
+throughout the project (https://claude.ai/code/artifact/45acd596-75f0-4d58-b6f9-233266007323).
+Note: the artifact viewer blocks file downloads, so "Save file" in the
+backup sheet is inert there (Copy works; on the phone it is the real
+share sheet).
+
+WORKFLOW RULE (Burak): visual/app changes are shown on the web/artifact
+first; the phone only updates when Burak runs the cable ritual himself
+(`cd ~/DATASETS && git pull && npm run ios && npx cap open ios`, ▶ in
+Xcode). Never imply the phone updated on its own.
+
+Logo: the "wild branches + smoother blend" mark, baked as a static path
+(see `#logo .mark` in index.html, `icons/`, and the iOS AppIcon/Splash);
+never ship the live gooey SVG filter (it renders jagged at small sizes).
 
 Design taste (Burak, after v1.3): the aurora Monthly Wrap landed very
 well — "exotic" immersive moments (full-bleed scenes, glowing gradient
@@ -27,13 +47,32 @@ Also: when planning future features (v1.4+), re-pitch the education
 package described in `VISION.md` § "Education package" — Burak asked to
 hear it again.
 
-## REMINDER: "DATASETS Business" — ASK BURAK AT THE START OF THE NEXT CONVERSATION
+## NEXT SESSION AGENDA (set by Burak on 2026-09-04, evening session)
 
-Burak named something called **"DATASETS Business"** (2026-09-01) and asked to
-be reminded of it in the next conversation — he will explain what it is then.
-Nothing else is known about it yet. At the start of the next session on this
-project, proactively ask: "You wanted me to remind you about 'DATASETS
-Business' — what is it?" Do not guess at its meaning before he explains.
+Status going in: v2.0 Glass + new logo + open-from-zero centering + UI zoom
+lock are on Burak's phone and he loves it ("IT IS FRICKING AWESOME").
+
+1. **Pre-launch backup feature — REVIEW FIRST.** Already built and live on
+   the web/artifact (commit "Backup feature…"), NOT yet on the phone:
+   share-sheet/file backup, file restore, "Back up data · <last backup>"
+   menu label, overdue-backup nudge card under the top bar (2 days after
+   first use if never backed up, then every 14 days; Later snoozes a
+   week; only when 3+ sources). Show it, get approval, then he runs the
+   cable ritual.
+2. **DATASETS Business.** Burak originally said he would explain his own
+   idea (2026-09-01); now he asked ME to pitch "the best possible business
+   version" and, if good, implement it as a new section. Full pitch and a
+   one-session implementation plan are in `BUSINESS.md`; concept mock in
+   `docs/business-mock.png`. Open by asking whether he has his own concept
+   to overlay, then present the pitch. Any pricing talk: quote VISION.md
+   verbatim first (see below).
+3. **LAUNCH.** Everything is prepared in `LAUNCH.md` (listing texts,
+   keywords, privacy answers, review notes, checklist), `privacy.html`
+   (served by Pages as the privacy-policy URL), App Store screenshots in
+   `store/screenshots/` (regenerate with `node tools/screenshots.js`), and
+   `ITSAppUsesNonExemptEncryption=NO` already in Info.plist. Walk him
+   through App Store Connect + Archive/Upload (IOS.md has the mechanics);
+   remind him to tick "Make available on Mac".
 
 ## LOGO: "Wild branches + Smoother blend" — APPLIED 2026-09-04
 
