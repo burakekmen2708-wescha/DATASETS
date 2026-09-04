@@ -50,8 +50,11 @@ Recipe (stroke #58a6ff / var(--accent) in-app, round caps, fill none):
 - Gooey junction filter on the group (kills the crease where branches meet):
   `feGaussianBlur stdDeviation="0.55"` then `feColorMatrix` values
   `1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10`.
-- Icons/splash are rasterized PNGs (filter pre-baked); the in-app mark keeps
-  the live SVG filter (verified crisp at 19px).
+- The filter is BAKED into a static traced path (potrace of a 1024px render)
+  used everywhere — in-app SVG, icons, splash. Never ship the live filter:
+  its hard alpha threshold kills anti-aliasing and looks jagged at small
+  sizes. The baked path lives in index.html (`#logo .mark`, 1024-unit
+  coordinates under `transform="scale(0.0234375)"`).
 
 ## RESOLVED: constellation sky & aurora colors
 
