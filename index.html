@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>DATASETS</title>
 <meta name="theme-color" content="#0e1116">
 <link rel="manifest" href="manifest.webmanifest">
@@ -107,6 +107,10 @@
     stroke: currentColor; fill: none;
     stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
   }
+
+  /* the UI itself never zooms (like a native app): no double-tap zoom
+     anywhere; only the map canvas zooms, via its own pointer handlers */
+  html, body { touch-action: manipulation; }
 
   /* ---------- canvas ---------- */
   #canvas {
@@ -968,6 +972,7 @@
     canvas.style.backgroundSize = s + 'px ' + s + 'px';
     canvas.style.backgroundPosition = view.x + 'px ' + view.y + 'px';
     state.view = { x: view.x, y: view.y, z: view.z };
+    try { sessionStorage.setItem('datasets-session-view', JSON.stringify(state.view)); } catch (e) { /* ignore */ }
     persist();
     if (typeof checkCosmos === 'function') checkCosmos();
   }
@@ -1005,20 +1010,29 @@
 
   function viewH() { return window.innerHeight - topH(); }
 
-  function fitView() {
+  function fitTarget() {
     var minX = -160, maxX = 160, minY = -80, maxY = 80;
-    state.datasets.forEach(function (d) {
+    var rendered = nodesDiv.querySelectorAll('.node');
+    if (rendered.length) {
+      rendered.forEach(function (n) {
+        var x = parseFloat(n.style.left) || 0, y = parseFloat(n.style.top) || 0;
+        var hw = n.offsetWidth / 2 + 24, hh = n.offsetHeight / 2 + 24;
+        minX = Math.min(minX, x - hw); maxX = Math.max(maxX, x + hw);
+        minY = Math.min(minY, y - hh); maxY = Math.max(maxY, y + hh);
+      });
+    } else state.datasets.forEach(function (d) {
       minX = Math.min(minX, d.x - 120); maxX = Math.max(maxX, d.x + 120);
       minY = Math.min(minY, d.y - 70);  maxY = Math.max(maxY, d.y + 70);
     });
     var w = maxX - minX, h = maxY - minY;
     var z = clamp(Math.min(window.innerWidth / w, viewH() / h) * 0.9, 0.22, 1.3);
-    animateView({
+    return {
       x: window.innerWidth / 2 - (minX + w / 2) * z,
       y: viewH() / 2 - (minY + h / 2) * z,
       z: z
-    }, 500);
+    };
   }
+  function fitView() { animateView(fitTarget(), 500); }
 
   /* ---------- render ---------- */
   var nodeEls = {}, wireEls = {}, linkEls = {};
@@ -2241,6 +2255,14 @@
     render();
   });
 
+  /* ---------- native zoom lock ---------- */
+  // iOS Safari fires proprietary gesture events for native pinch-zoom of
+  // the page; cancelling them keeps the UI at 1:1 while the map's own
+  // pointer-based pinch (on #canvas, touch-action:none) still works
+  ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (t) {
+    document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false });
+  });
+
   /* ---------- global keys ---------- */
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
@@ -2263,9 +2285,14 @@
   /* ---------- boot ---------- */
   state = migrate(load());
   if (state.meName === 'Burak') { state.meName = 'Burak Ekmen'; persist(); }
-  if (state.view && typeof state.view.x === 'number') {
-    view = { x: state.view.x, y: state.view.y, z: state.view.z || 1 };
-  }
+  // Tab still open on the device -> hold the exact position (per-tab
+  // sessionStorage survives while the tab lives, even across a refresh or a
+  // browser-forced reload). App/tab closed and relaunched -> sessionStorage
+  // is gone -> open recentered on the full map.
+  var sessView = null;
+  try { sessView = JSON.parse(sessionStorage.getItem('datasets-session-view') || 'null'); } catch (e) { /* ignore */ }
+  var holdView = sessView && typeof sessView.x === 'number';
+  if (holdView) view = { x: sessView.x, y: sessView.y, z: sessView.z || 1 };
   try {
     if (location.protocol === 'capacitor:') {
       var saProbe = document.createElement('div');
@@ -2279,8 +2306,21 @@
     }
   } catch (e) { /* ignore */ }
 
-  applyView();
-  render();
+  if (holdView) {
+    applyView();
+    render();
+  } else {
+    // relaunch from zero: open on the full map, centered, with a gentle
+    // settle from slightly closer
+    render();
+    var fitT = fitTarget();
+    var fitCx = (window.innerWidth / 2 - fitT.x) / fitT.z;
+    var fitCy = (viewH() / 2 - fitT.y) / fitT.z;
+    var fitZ0 = fitT.z * 1.12;
+    view = { x: window.innerWidth / 2 - fitCx * fitZ0, y: viewH() / 2 - fitCy * fitZ0, z: fitZ0 };
+    applyView();
+    animateView(fitT, 700);
+  }
 
   // last month's wrap, once, if it had lessons; otherwise today's first
   // open gets the daily resurface card
