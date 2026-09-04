@@ -492,6 +492,26 @@
     font-family: ui-monospace, 'SF Mono', 'IBM Plex Mono', monospace; font-size: 11.5px;
   }
 
+  /* ---------- backup nudge (drops in under the top bar) ---------- */
+  #backupNudge {
+    position: fixed; left: 50%; top: calc(var(--sat) + 76px); z-index: 40;
+    transform: translate(-50%, 0);
+    width: min(400px, calc(100% - 24px));
+    background: var(--glass-strong);
+    -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+    border: 1px solid var(--line); border-radius: 18px;
+    box-shadow: var(--shadow-lg);
+    padding: 14px 16px 12px;
+    display: flex; flex-direction: column; gap: 9px;
+    animation: nudgeIn .5s cubic-bezier(.2, .8, .2, 1);
+  }
+  @keyframes nudgeIn { from { opacity: 0; transform: translate(-50%, -14px); } to { opacity: 1; transform: translate(-50%, 0); } }
+  #backupNudge .ntitle { font-size: 14px; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; }
+  #backupNudge .ntitle .ic { width: 17px; height: 17px; color: var(--accent); }
+  #backupNudge .nbody { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+  #backupNudge .mrow .btn { padding: 7px 14px; }
+  #backupNudge .mrow .btn:not(.primary) { background: var(--field); }
+
   /* ---------- resurface ---------- */
   .rsquote { font-size: 16px; line-height: 1.65; white-space: pre-line; }
   .rsmeta {
@@ -658,6 +678,7 @@
   <defs>
     <g id="i-search"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></g>
     <g id="i-plus"><path d="M12 5v14M5 12h14"/></g>
+    <g id="i-backup"><path d="M12 15V4m0 0L8 8m4-4l4 4"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></g>
     <g id="i-minus"><path d="M5 12h14"/></g>
     <g id="i-close"><path d="M6 6l12 12M18 6L6 18"/></g>
     <g id="i-fit"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M16 21h3a2 2 0 0 0 2-2v-3M8 21H5a2 2 0 0 1-2-2v-3"/></g>
@@ -823,8 +844,20 @@
     <textarea id="ioText" spellcheck="false"></textarea>
     <div class="mrow">
       <button class="btn" id="ioCancel">Close</button>
+      <button class="btn" id="ioFileBtn" hidden>Choose file…</button>
+      <button class="btn" id="ioDownload" hidden>Save file</button>
       <button class="btn primary" id="ioAction">Copy</button>
     </div>
+  </div>
+</div>
+<input type="file" id="ioFile" accept=".json,application/json" hidden>
+
+<div id="backupNudge" hidden>
+  <div class="ntitle"><svg class="ic" viewBox="0 0 24 24"><use href="#i-backup"/></svg>Back up your datasets</div>
+  <div class="nbody" id="nudgeBody"></div>
+  <div class="mrow">
+    <button class="btn" id="nudgeLater">Later</button>
+    <button class="btn primary" id="nudgeNow">Back up now</button>
   </div>
 </div>
 
@@ -934,6 +967,9 @@
       }
       if (!Array.isArray(d.links)) d.links = [];
     });
+    if (!s.firstOpenAt) s.firstOpenAt = Date.now();
+    if (typeof s.lastBackupAt !== 'number') s.lastBackupAt = null;
+    if (typeof s.backupSnoozedUntil !== 'number') s.backupSnoozedUntil = 0;
     return s;
   }
   function entriesText(d) {
@@ -2191,16 +2227,105 @@
   });
 
   var ioMode = 'export';
-  el('mExport').addEventListener('click', function () {
-    closeMenu();
+  /* ---------- backup ---------- */
+  function backupJson() { return JSON.stringify(state, null, 2); }
+  function backupFilename() {
+    var d = new Date(), p = function (n) { return (n < 10 ? '0' : '') + n; };
+    return 'datasets-backup-' + d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + '.json';
+  }
+  function daysSince(ts) { return Math.floor((Date.now() - ts) / 86400000); }
+  function backupAgeText() {
+    if (!state.lastBackupAt) return 'never';
+    var n = daysSince(state.lastBackupAt);
+    return n <= 0 ? 'today' : n === 1 ? 'yesterday' : n + ' days ago';
+  }
+  function refreshBackupLabel() { el('mExport').textContent = 'Back up data · ' + backupAgeText(); }
+  function markBackedUp() {
+    state.lastBackupAt = Date.now();
+    state.backupSnoozedUntil = 0;
+    persist();
+    hideNudge();
+    refreshBackupLabel();
+  }
+  function canShareFile(file) {
+    try { return !!(navigator.share && navigator.canShare && navigator.canShare({ files: [file] })); }
+    catch (e) { return false; }
+  }
+  // Phone: the share sheet (Save to Files, iCloud Drive, AirDrop, Notes).
+  // Elsewhere: the sheet with Save file / Copy.
+  function backupNow() {
+    var file = null;
+    try { file = new File([backupJson()], backupFilename(), { type: 'application/json' }); } catch (e) { /* no File ctor */ }
+    if (file && canShareFile(file)) {
+      navigator.share({ files: [file], title: 'DATASETS backup' })
+        .then(markBackedUp)
+        .catch(function () { /* sheet dismissed */ });
+      return;
+    }
+    openExportSheet();
+  }
+  function downloadBackup() {
+    var blob = new Blob([backupJson()], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = backupFilename();
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    markBackedUp();
+  }
+  function openExportSheet() {
     ioMode = 'export';
     el('ioTag').textContent = 'backup';
-    el('ioTitle').textContent = 'Export your data';
-    el('ioHelp').textContent = 'Copy this JSON somewhere safe (a file, a note). You can paste it back later with Import.';
-    el('ioText').value = JSON.stringify(state, null, 2);
-    el('ioAction').textContent = 'Copy to clipboard';
+    el('ioTitle').textContent = 'Back up your data';
+    el('ioHelp').textContent = 'Save this as a file, or copy it somewhere safe (a note, an email to yourself). Restore it later with Import.';
+    el('ioText').value = backupJson();
+    el('ioAction').textContent = 'Copy';
+    el('ioDownload').hidden = false;
+    el('ioFileBtn').hidden = true;
     el('ioOverlay').hidden = false;
+  }
+  function hideNudge() { el('backupNudge').hidden = true; }
+  // Returns 'busy' when another surface is up, so the caller can retry.
+  function maybeShowBackupNudge() {
+    if (state.datasets.length < 3) return 'skip';              // nothing worth losing yet
+    if (Date.now() < (state.backupSnoozedUntil || 0)) return 'skip';
+    var due = state.lastBackupAt ? daysSince(state.lastBackupAt) >= 14
+                                 : daysSince(state.firstOpenAt || Date.now()) >= 2;
+    if (!due) return 'skip';
+    var overlayOpen = Array.prototype.some.call(document.querySelectorAll('.overlay'), function (o) { return !o.hidden; });
+    if (overlayOpen || !el('wrap').hidden || !panel.hidden) return 'busy';
+    var n = state.datasets.length, e = 0;
+    state.datasets.forEach(function (d) { e += (d.entries || []).length; });
+    el('nudgeBody').textContent = 'Your ' + n + ' sources and ' + e + ' notes live only on this device. Last backup: ' + backupAgeText() + '.';
+    el('backupNudge').hidden = false;
+    return 'shown';
+  }
+  function scheduleBackupNudge(tries) {
+    setTimeout(function () {
+      if (maybeShowBackupNudge() === 'busy' && tries > 0) scheduleBackupNudge(tries - 1);
+    }, 3000);
+  }
+  el('nudgeNow').addEventListener('click', backupNow);
+  el('nudgeLater').addEventListener('click', function () {
+    state.backupSnoozedUntil = Date.now() + 7 * 86400000;
+    persist();
+    hideNudge();
   });
+  el('ioDownload').addEventListener('click', downloadBackup);
+  el('ioFileBtn').addEventListener('click', function () { el('ioFile').click(); });
+  el('ioFile').addEventListener('change', function () {
+    var f = el('ioFile').files && el('ioFile').files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      el('ioText').value = String(r.result || '');
+      el('ioHelp').textContent = 'Loaded ' + f.name + ' — press Import & replace to restore it.';
+    };
+    r.readAsText(f);
+    el('ioFile').value = '';
+  });
+
+  el('mExport').addEventListener('click', function () { closeMenu(); backupNow(); });
   el('mImport').addEventListener('click', function () {
     closeMenu();
     ioMode = 'import';
@@ -2209,6 +2334,8 @@
     el('ioHelp').textContent = 'Paste a previously exported JSON below. This replaces everything currently in the graph.';
     el('ioText').value = '';
     el('ioAction').textContent = 'Import & replace';
+    el('ioDownload').hidden = true;
+    el('ioFileBtn').hidden = false;
     el('ioOverlay').hidden = false;
     el('ioText').focus();
   });
@@ -2224,7 +2351,8 @@
       }
       try { if (!copied) document.execCommand('copy'); } catch (e) { /* manual copy */ }
       el('ioAction').textContent = 'Copied';
-      setTimeout(function () { el('ioAction').textContent = 'Copy to clipboard'; }, 1500);
+      setTimeout(function () { el('ioAction').textContent = 'Copy'; }, 1500);
+      markBackedUp();
     } else {
       var parsed;
       try { parsed = JSON.parse(el('ioText').value); }
@@ -2321,6 +2449,9 @@
     applyView();
     animateView(fitT, 700);
   }
+
+  refreshBackupLabel();
+  scheduleBackupNudge(20);
 
   // last month's wrap, once, if it had lessons; otherwise today's first
   // open gets the daily resurface card
