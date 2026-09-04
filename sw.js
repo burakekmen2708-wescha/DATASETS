@@ -1,5 +1,5 @@
 /* DATASETS service worker — cache-first so the app works fully offline. */
-var CACHE = 'datasets-v8';
+var CACHE = 'datasets-v9';
 var ASSETS = [
   './',
   './index.html',
