@@ -35,6 +35,24 @@ Nothing else is known about it yet. At the start of the next session on this
 project, proactively ask: "You wanted me to remind you about 'DATASETS
 Business' — what is it?" Do not guess at its meaning before he explains.
 
+## LOGO CANDIDATE (chosen 2026-09-04, NOT YET APPLIED)
+
+Burak picked the "Wild branches + Smoother blend" mark as the candidate to
+replace the current box mark. DO NOT apply it anywhere until he explicitly
+says so — the current box mark stays live in the app, icons, and splash.
+Recipe (viewBox "-4.5 -4.5 33 33", stroke #58a6ff, round caps, fill none):
+
+- Branches (do not change angles/shapes/widths):
+  - stroke-width 2.4: `M12 12 Q 8.2 10.4 6.2 6.2`
+  - stroke-width 2.0: `M12 12 Q 15.6 11.2 18.3 8.6`
+  - stroke-width 2.2: `M12 12 Q 8.4 14.2 6.7 17.8`
+  - stroke-width 2.7: `M12 12 Q 15.0 15.8 18.6 17.2`
+- Gooey junction filter on the group (kills the crease where branches meet):
+  `feGaussianBlur stdDeviation="0.55"` then `feColorMatrix` values
+  `1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10`.
+- When applying for real, bake the filtered result into a static path (or
+  keep the filter — but test it renders on iOS WKWebView + as PNG icons).
+
 ## RESOLVED: constellation sky & aurora colors
 
 Burak reviewed three palette demos (Polar / Ember / Emerald) and chose to
