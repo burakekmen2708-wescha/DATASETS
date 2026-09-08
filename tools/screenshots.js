@@ -42,6 +42,20 @@ async function fresh(page, scheme) {
   });
 }
 const click = (page, id) => page.evaluate((i) => document.getElementById(i).click(), id);
+// Phone shots: pull the demo nodes closer to the center so the fitted map
+// is large and every card stays legible and fully on screen.
+async function compact(page, factor) {
+  await page.goto(URL, { waitUntil: 'domcontentloaded' }); await page.waitForTimeout(1500);
+  await page.evaluate((f) => {
+    const st = JSON.parse(localStorage.getItem('datasets-app-v1'));
+    st.datasets.forEach((d) => { d.x = Math.round(d.x * f); d.y = Math.round(d.y * f); });
+    localStorage.setItem('datasets-app-v1', JSON.stringify(st));
+    sessionStorage.clear();
+  }, factor);
+}
+async function closer(page) {
+  await click(page, 'mFit'); await page.waitForTimeout(800);
+}
 
 async function storeShots(browser) {
   for (const [name, s] of Object.entries(SIZES)) {
@@ -51,18 +65,21 @@ async function storeShots(browser) {
     const page = await ctx.newPage();
     await offline(page);
     const shot = (f) => page.screenshot({ path: path.join(dir, f) });
+    if (s.w < 600) await compact(page, 0.62);
 
     await fresh(page, 'light');
-    await click(page, 'mFit'); await page.waitForTimeout(800);
+    await closer(page);
     await shot('1-map.png');
 
     await fresh(page, 'dark');
     await page.locator('.node:not(.me)').first().click(); await page.waitForTimeout(800);
     await shot('2-panel.png');
 
+    if (s.w < 600) await compact(page, 1 / 0.62);   // the night sky wants the wide layout
     await fresh(page, 'dark');
     await click(page, 'mCosmos'); await page.waitForTimeout(2200);
     await shot('3-constellation.png');
+    if (s.w < 600) await compact(page, 0.62);
 
     await fresh(page, 'dark');
     await click(page, 'mWrap'); await page.waitForTimeout(1600);
@@ -73,12 +90,13 @@ async function storeShots(browser) {
     await shot('5-resurface.png');
 
     await fresh(page, 'light');
+    await closer(page);
     await page.locator('#legend button.lgroup').first().click(); await page.waitForTimeout(600);
     await shot('6-groups.png');
 
     // dark-theme versions of the light shots (Burak wants both looks available)
     await fresh(page, 'dark');
-    await click(page, 'mFit'); await page.waitForTimeout(800);
+    await closer(page);
     await shot('7-map-dark.png');
 
     await fresh(page, 'dark');
@@ -86,6 +104,7 @@ async function storeShots(browser) {
     await shot('8-resurface-dark.png');
 
     await fresh(page, 'dark');
+    await closer(page);
     await page.locator('#legend button.lgroup').first().click(); await page.waitForTimeout(600);
     await shot('9-groups-dark.png');
 
