@@ -59,7 +59,7 @@ lock are on Burak's phone and he loves it ("IT IS FRICKING AWESOME").
    first use if never backed up, then every 14 days; Later snoozes a
    week; only when 3+ sources). Show it, get approval, then he runs the
    cable ritual.
-2. **DATASETS Business.** Burak originally said he would explain his own
+2. **DATASETS Business — ON HOLD (Burak, 2026-09-08: launch first).** Burak originally said he would explain his own
    idea (2026-09-01); now he asked ME to pitch "the best possible business
    version" and, if good, implement it as a new section. Full pitch and a
    one-session implementation plan are in `BUSINESS.md`; concept mock in
