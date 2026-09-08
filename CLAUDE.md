@@ -47,7 +47,16 @@ Also: when planning future features (v1.4+), re-pitch the education
 package described in `VISION.md` § "Education package" — Burak asked to
 hear it again.
 
-## NEXT SESSION AGENDA (set by Burak on 2026-09-04, evening session)
+## STATUS: SUBMITTED TO APP REVIEW on 2026-09-08 (v1.0 build 1)
+
+Burak submitted DATASETS 1.0 (1) to App Review on 2026-09-08 ("Waiting for
+Review", automatic release, free, all countries, also available on Apple
+Silicon Macs and Vision Pro). Backup feature approved and on his phone.
+Next session: check the review outcome first. If rejected, fix/answer the
+same day (bump Build to 2 for any new upload). If approved, it is live.
+Then pick up "DATASETS Business" (on hold, see BUSINESS.md).
+
+## AGENDA SET 2026-09-04 (items 1 and 3 DONE 2026-09-08; item 2 on hold)
 
 Status going in: v2.0 Glass + new logo + open-from-zero centering + UI zoom
 lock are on Burak's phone and he loves it ("IT IS FRICKING AWESOME").
