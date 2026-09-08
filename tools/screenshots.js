@@ -12,11 +12,17 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const URL = 'file://' + path.join(ROOT, 'index.html');
 const EXE = process.env.CHROMIUM || '/opt/pw-browsers/chromium';
-const SIZES = {
+const ALL_SIZES = {
   'iphone-6.9': { w: 440, h: 956, dpr: 3 },   // 1320 x 2868
   'iphone-6.7': { w: 430, h: 932, dpr: 3 },   // 1290 x 2796
+  'iphone-6.5': { w: 428, h: 926, dpr: 3 },   // 1284 x 2778  (what App Store Connect asks for)
   'ipad-13':    { w: 1032, h: 1376, dpr: 2 }, // 2064 x 2752
+  'ipad-12.9':  { w: 1024, h: 1366, dpr: 2 }, // 2048 x 2732
 };
+// ONLY=iphone-6.5,ipad-12.9 node tools/screenshots.js  -> just those sizes
+const SIZES = process.env.ONLY
+  ? Object.fromEntries(process.env.ONLY.split(',').map((k) => [k, ALL_SIZES[k]]))
+  : ALL_SIZES;
 
 // the app loads offline; skip external requests (fonts) so page loads are instant
 async function offline(page) {
@@ -135,6 +141,6 @@ async function businessMock(browser) {
 (async () => {
   const browser = await chromium.launch({ executablePath: EXE });
   await storeShots(browser);
-  await businessMock(browser);
+  if (!process.env.ONLY) await businessMock(browser);
   await browser.close();
 })().catch((e) => { console.error(e); process.exit(1); });

@@ -110,6 +110,7 @@ user owns.
 ## Screenshots
 Generated from the app with the demo content, in `store/screenshots/`:
 - `iphone-6.9/` — 1320×2868 (iPhone 16 Pro Max class; the required size)
+- `iphone-6.5/` — 1284×2778 (the size App Store Connect asked for on 2026-09-08)
 - `iphone-6.7/` — 1290×2796 (iPhone 15 Pro Max class)
 - `ipad-13/` — 2064×2752 (iPad Pro 13", required because the app also
   installs on iPad)
@@ -132,3 +133,5 @@ Regenerate any time with `node tools/screenshots.js` (needs
 - Next version: bump Build (and Version for user-visible releases), then
   `git pull && npm run ios && npx cap open ios` → Archive → Upload → add
   the build to a new version in App Store Connect → Submit.
+
+- `ipad-12.9/` — 2048×2732 (iPad Pro 12.9" format, if the iPad tab asks for it)
