@@ -2407,6 +2407,13 @@
     }
   });
 
+  // the long search hint only fits on wide screens; phones get the short one
+  function fitSearchHint() {
+    searchInput.placeholder = window.innerWidth < 640 ? 'Search' : 'Search sources, notes, groups';
+  }
+  fitSearchHint();
+  window.addEventListener('resize', fitSearchHint);
+
   window.addEventListener('resize', function () { applyView(); });
 
   /* ---------- boot ---------- */
