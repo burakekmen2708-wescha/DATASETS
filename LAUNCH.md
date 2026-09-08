@@ -122,6 +122,10 @@ Order to upload (first two matter most — they show in search results):
 4. wrap — the Monthly Wrap aurora
 5. resurface — today's lesson card
 6. groups — color groups lighting up part of the map
+7. map-dark — the whole graph, dark theme (Burak: show both looks; put it
+   right after 1)
+8. resurface-dark, 9. groups-dark — dark versions of 5 and 6 (optional;
+   the store allows 10 per device)
 
 Regenerate any time with `node tools/screenshots.js` (needs
 `playwright-core` and a Chromium; see the script header).

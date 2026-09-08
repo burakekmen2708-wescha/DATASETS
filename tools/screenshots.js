@@ -76,6 +76,19 @@ async function storeShots(browser) {
     await page.locator('#legend button.lgroup').first().click(); await page.waitForTimeout(600);
     await shot('6-groups.png');
 
+    // dark-theme versions of the light shots (Burak wants both looks available)
+    await fresh(page, 'dark');
+    await click(page, 'mFit'); await page.waitForTimeout(800);
+    await shot('7-map-dark.png');
+
+    await fresh(page, 'dark');
+    await click(page, 'mResurface'); await page.waitForTimeout(700);
+    await shot('8-resurface-dark.png');
+
+    await fresh(page, 'dark');
+    await page.locator('#legend button.lgroup').first().click(); await page.waitForTimeout(600);
+    await shot('9-groups-dark.png');
+
     await ctx.close();
     console.log('store screenshots:', name);
   }
