@@ -19,10 +19,18 @@ const ALL_SIZES = {
   'ipad-13':    { w: 1032, h: 1376, dpr: 2 }, // 2064 x 2752
   'ipad-12.9':  { w: 1024, h: 1366, dpr: 2 }, // 2048 x 2732
 };
+// Google Play sizes (PLAY=1 node tools/screenshots.js -> store/play/)
+const PLAY_SIZES = {
+  'phone':     { w: 432, h: 768, dpr: 2.5 },  // 1080 x 1920 (9:16)
+  'tablet-7':  { w: 600, h: 960, dpr: 2 },    // 1200 x 1920
+  'tablet-10': { w: 800, h: 1280, dpr: 2 },   // 1600 x 2560
+};
 // ONLY=iphone-6.5,ipad-12.9 node tools/screenshots.js  -> just those sizes
-const SIZES = process.env.ONLY
+const PLAY = !!process.env.PLAY;
+const SIZES = PLAY ? PLAY_SIZES : process.env.ONLY
   ? Object.fromEntries(process.env.ONLY.split(',').map((k) => [k, ALL_SIZES[k]]))
   : ALL_SIZES;
+const OUT = PLAY ? path.join(ROOT, 'store', 'play') : path.join(ROOT, 'store', 'screenshots');
 
 // the app loads offline; skip external requests (fonts) so page loads are instant
 async function offline(page) {
@@ -59,13 +67,13 @@ async function closer(page) {
 
 async function storeShots(browser) {
   for (const [name, s] of Object.entries(SIZES)) {
-    const dir = path.join(ROOT, 'store', 'screenshots', name);
+    const dir = path.join(OUT, name);
     fs.mkdirSync(dir, { recursive: true });
     const ctx = await browser.newContext({ viewport: { width: s.w, height: s.h }, deviceScaleFactor: s.dpr });
     const page = await ctx.newPage();
     await offline(page);
     const shot = (f) => page.screenshot({ path: path.join(dir, f) });
-    if (s.w < 600) await compact(page, 0.62);
+    if (s.w < 600) await compact(page, PLAY ? 0.56 : 0.62);
 
     await fresh(page, 'light');
     await closer(page);
@@ -75,11 +83,11 @@ async function storeShots(browser) {
     await page.locator('.node:not(.me)').first().click(); await page.waitForTimeout(800);
     await shot('2-panel.png');
 
-    if (s.w < 600) await compact(page, 1 / 0.62);   // the night sky wants the wide layout
+    if (s.w < 600) await compact(page, PLAY ? 1 / 0.56 : 1 / 0.62);   // the night sky wants the wide layout
     await fresh(page, 'dark');
     await click(page, 'mCosmos'); await page.waitForTimeout(2200);
     await shot('3-constellation.png');
-    if (s.w < 600) await compact(page, 0.62);
+    if (s.w < 600) await compact(page, PLAY ? 0.56 : 0.62);
 
     await fresh(page, 'dark');
     await click(page, 'mWrap'); await page.waitForTimeout(1600);
@@ -170,9 +178,21 @@ async function businessMock(browser) {
   console.log('business mock: docs/business-mock.png');
 }
 
+// Play feature graphic (1024x500) + 512 icon
+async function playExtras(browser) {
+  const page = await browser.newPage({ viewport: { width: 1024, height: 500 } });
+  await page.goto('file://' + path.join(ROOT, 'tools', 'feature-graphic.html'), { waitUntil: 'domcontentloaded' });
+  await page.waitForTimeout(300);
+  await page.locator('#fg').screenshot({ path: path.join(OUT, 'feature-graphic.png') });
+  await page.close();
+  fs.copyFileSync(path.join(ROOT, 'icons', 'icon-512.png'), path.join(OUT, 'icon-512.png'));
+  console.log('play extras: feature graphic + icon');
+}
+
 (async () => {
   const browser = await chromium.launch({ executablePath: EXE });
+  if (PLAY) { fs.mkdirSync(OUT, { recursive: true }); await playExtras(browser); }
   await storeShots(browser);
-  if (!process.env.ONLY) await businessMock(browser);
+  if (!process.env.ONLY && !PLAY) await businessMock(browser);
   await browser.close();
 })().catch((e) => { console.error(e); process.exit(1); });

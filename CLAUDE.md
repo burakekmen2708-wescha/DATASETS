@@ -56,6 +56,19 @@ Next session: check the review outcome first. If rejected, fix/answer the
 same day (bump Build to 2 for any new upload). If approved, it is live.
 Then pick up "DATASETS Business" (on hold, see BUSINESS.md).
 
+## GOOGLE PLAY — prepared 2026-09-08, not yet submitted
+
+Android shell added (`android/`, Capacitor 8, `npm run android` = build
+www + sync). Icons/splash generated from `resources/` with
+`@capacitor/assets`; hardware back button handled via `@capacitor/app`
+(closes sheets/panel/menu before exiting). Play assets in `store/play/`
+(feature graphic 1024x500, icon 512, phone 1080x1920, tablet 7"/10").
+Full walkthrough + listing texts + data-safety answers in `PLAY.md`.
+KEY CONSTRAINT: a new personal Play developer account must run a closed
+test with 12+ opted-in testers for 14 days before production access
+(organization accounts are exempt). Burak still needs: Play Console
+account ($25), Android Studio on the Mac, signed .aab (see PLAY.md).
+
 ## AGENDA SET 2026-09-04 (items 1 and 3 DONE 2026-09-08; item 2 on hold)
 
 Status going in: v2.0 Glass + new logo + open-from-zero centering + UI zoom

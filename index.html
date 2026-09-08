@@ -2390,6 +2390,21 @@
     document.addEventListener(t, function (e) { e.preventDefault(); }, { passive: false });
   });
 
+  /* ---------- Android back button ---------- */
+  // Close whatever is open first; only leave the app from the bare map.
+  try {
+    var capApp = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
+    if (capApp && capApp.addListener) capApp.addListener('backButton', function () {
+      var sheets = ['addOverlay', 'promptOverlay', 'ioOverlay', 'rsOverlay', 'groupsOverlay'];
+      for (var i = 0; i < sheets.length; i++) if (!el(sheets[i]).hidden) { el(sheets[i]).hidden = true; return; }
+      if (!el('wrap').hidden) { closeWrap(); return; }
+      if (!panel.hidden) { closePanel(); return; }
+      if (!menu.hidden) { closeMenu(); return; }
+      if (!el('backupNudge').hidden) { hideNudge(); return; }
+      if (capApp.exitApp) capApp.exitApp();
+    });
+  } catch (e) { /* not running inside the native shell */ }
+
   /* ---------- global keys ---------- */
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
