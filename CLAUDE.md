@@ -52,6 +52,12 @@ hear it again.
 Burak submitted DATASETS 1.0 (1) to App Review on 2026-09-08 ("Waiting for
 Review", automatic release, free, all countries, also available on Apple
 Silicon Macs and Vision Pro). Backup feature approved and on his phone.
+UPDATE 2026-09-09: Apple asked for more info (Guideline 2.1, Information
+Needed, standard for new developer accounts): screen recording on a
+physical device + written answers (purpose/audience, access instructions,
+external services = none, regional differences = none, regulated = no).
+Burak replied with the video and the answers and resubmitted on 2026-09-12.
+The same text is in App Review Information > Notes.
 Next session: check the review outcome first. If rejected, fix/answer the
 same day (bump Build to 2 for any new upload). If approved, it is live.
 Then pick up "DATASETS Business" (on hold, see BUSINESS.md).
