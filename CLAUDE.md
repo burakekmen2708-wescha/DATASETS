@@ -47,7 +47,15 @@ Also: when planning future features (v1.4+), re-pitch the education
 package described in `VISION.md` § "Education package" — Burak asked to
 hear it again.
 
-## STATUS: SUBMITTED TO APP REVIEW on 2026-09-08 (v1.0 build 1)
+## STATUS: LIVE ON THE APP STORE (approved 2026-09-15, v1.0 build 1)
+
+https://apps.apple.com/app/datasets/id6809956444 (iPhone, iPad, Apple
+Silicon Macs, Vision Pro; free, worldwide). Google Play: developer account
+registration in progress on a fresh personal Gmail (the first Gmail was
+Family-Link supervised, which blocks Google Payments); bundle and assets
+ready, see PLAY.md and the 12-tester closed-test rule.
+
+## HISTORY: SUBMITTED TO APP REVIEW on 2026-09-08 (v1.0 build 1)
 
 Burak submitted DATASETS 1.0 (1) to App Review on 2026-09-08 ("Waiting for
 Review", automatic release, free, all countries, also available on Apple

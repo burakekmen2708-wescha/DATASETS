@@ -1,5 +1,7 @@
 # DATASETS — App Store launch kit
 
+**LIVE since 2026-09-15: https://apps.apple.com/app/datasets/id6809956444**
+
 Everything needed to fill in App Store Connect, prepared 2026-09-04. The
 technical steps (Archive → Upload) are in IOS.md; this file is the content.
 
